@@ -39,8 +39,6 @@ class CarController extends Controller
      */
     public function store(Request $request)
     {
-        sleep(10);
-
         $validatedData = $request->validate([
             'plate_number' => ['required', 'regex:/[A-Z]{3} [0-9]{4}/'],
             'make' => 'required',

@@ -2,11 +2,11 @@
     <Head title="Home" />
 
     <Layout>
-        <h1>Hello, {{ user != null ? user.name : 'User' }}</h1>
+        <h1>Hello, {{ _.isEmpty(user) ? user.name : 'User' }}</h1>
 
         <div class="mt-5">
             <div class="d-flex justify-content-center">
-                <FullCalendar :options="calendarOptions" class="w-100"/>
+                <FullCalendar :options="calendarOptions" class="w-100" />
             </div>
         </div>
     </Layout>
@@ -32,7 +32,7 @@ export default {
     data() {
         return {
             calendarOptions: {
-                plugins: [ dayGridPlugin, interactionPlugin, bootstrap5Plugin, timeGrid,  fullCalendarList],
+                plugins: [dayGridPlugin, interactionPlugin, bootstrap5Plugin, timeGrid, fullCalendarList],
                 initialView: 'dayGridMonth',
                 themeSystem: 'bootstrap5',
                 headerToolbar: {
