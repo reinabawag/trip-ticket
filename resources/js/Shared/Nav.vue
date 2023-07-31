@@ -11,22 +11,22 @@
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <NavLink href="/" :active="$page.component === 'Home'">
-                            Home
+                            <i class="bi bi-house"></i>&nbsp;Home
                         </NavLink>
                     </li>
                     <li class="nav-item">
                         <NavLink href="/book" :active="$page.component === 'Book'">
-                            Book
+                            <i class="bi bi-book"></i>&nbsp;Book
                         </NavLink>
                     </li>
                     <li class="nav-item">
                         <NavLink href="/cars" :active="$page.component === 'Car'">
-                            Car Management
+                            <i class="bi bi-car-front"></i>&nbsp;Car Management
                         </NavLink>
                     </li>
                     <li v-if="$page.props.auth.user" class="nav-item">
                         <NavLink href="/logout" method="post" as="button">
-                            Logout
+                            <i class="bi bi-box-arrow-left"></i>&nbsp;Logout
                         </NavLink>
                     </li>
                 </ul>
@@ -35,13 +35,6 @@
     </nav>
 </template>
 
-<script>
-import { Link } from '@inertiajs/vue3'
+<script setup>
 import NavLink from './NavLink'
-
-export default {
-    components: {
-        Link, NavLink
-    },
-};
 </script>

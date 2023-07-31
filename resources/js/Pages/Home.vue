@@ -2,7 +2,7 @@
     <Head title="Home" />
 
     <Layout>
-        <h1>Hello, {{ _.isEmpty(user) ? user.name : 'User' }}</h1>
+        <h1>Hello, {{ user != null ? user.name : 'User' }}</h1>
 
         <div class="mt-5">
             <div class="d-flex justify-content-center">

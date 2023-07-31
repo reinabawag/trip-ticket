@@ -2,7 +2,6 @@
     <Nav />
 
     <div class="container">
-        <!-- <CarAvailability /> -->
         <div class="mt-5">
             <slot />
         </div>
@@ -18,13 +17,6 @@
     </footer>
 </template>
 
-<script>
+<script setup>
 import Nav from './Nav'
-import CarAvailability from './CarAvailability.vue';
-
-export default {
-    components: {
-        Nav, CarAvailability
-    }
-};
 </script>

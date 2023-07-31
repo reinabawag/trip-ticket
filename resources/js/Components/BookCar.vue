@@ -7,7 +7,7 @@
             <h5 class="card-title">{{ car.plate_number }}</h5>
             <p class="card-text" v-text="`${car.make} ${car.model}`"></p>
             <p class="card-text"></p>
-            <a role="button" href="#" @click.prevent="btnClicked" data-bs-toggle="modal" data-bs-target="#modal" class="btn btn-success">Book ME!</a>
+            <a role="button" href="#" @click.prevent="btnClicked" data-bs-toggle="modal" data-bs-target="#modal" class="btn btn-success"><i class="bi bi-calendar2-plus"></i> Book ME!</a>
         </div>
     </div>
 </template>
