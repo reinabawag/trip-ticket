@@ -9,12 +9,13 @@ class LoginController extends Controller
 {
     public function authenticate(Request $request)
     {
-        $credentials = $request->validate([
+        $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
+            'remember' => 'boolean'
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($request->only(['email', 'password']), $request->remember)) {
             $request->session()->regenerate();
  
             return redirect()->intended('/book');

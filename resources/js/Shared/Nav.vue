@@ -24,6 +24,11 @@
                             <i class="bi bi-car-front"></i>&nbsp;Car Management
                         </NavLink>
                     </li>
+                    <li class="nav-item">
+                        <NavLink href="/profile" :active="$page.component === 'Profile'">
+                            <i class="bi bi-person"></i>&nbsp;Profile
+                        </NavLink>
+                    </li>
                     <li v-if="$page.props.auth.user" class="nav-item">
                         <NavLink href="/logout" method="post" as="button">
                             <i class="bi bi-box-arrow-left"></i>&nbsp;Logout

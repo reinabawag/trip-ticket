@@ -31,7 +31,7 @@
                     </div>
                     <div class="input-group mb-5 d-flex justify-content-between">
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="formCheck">
+                            <input type="checkbox" class="form-check-input" v-model="form.remember" id="formCheck">
                             <label for="formCheck" class="form-check-label text-secondary"><small>Remember Me</small></label>
                         </div>
                         <div class="forgot">
@@ -60,7 +60,8 @@ import { useForm, Head } from '@inertiajs/vue3';
 
 const form = useForm({
     email: null,
-    password: null
+    password: null,
+    remember: true
 });
 </script>
 

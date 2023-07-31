@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\Trip;
 use App\Models\Car;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,4 +39,10 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/cars', 'index');
         Route::post('/cars', 'store');
     });
+
+    Route::get('/profile', function() {
+        return Inertia::render('Profile', [
+            'bookings' => fn () => \App\Http\Resources\TripCarResource::collection(Auth::user()->trips),
+        ]);
+    })->name('profile');
 });
