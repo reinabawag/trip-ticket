@@ -51,7 +51,7 @@ export default {
     <Layout>
         <h1>Car Management</h1>
 
-        <div class="row mt-5">
+        <div class="row">
             <div class="col-4">
                 <form @submit.prevent="form.post('/cars', { preserveScroll: true, preserveState: (page) => Object.keys(page.props.errors).length })" class="mt-2">
                     <div class="mb-3">

@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return Inertia::render('Home');
-});
+})->name('home');
 
 Route::get('/login', function() {
     return Inertia::render('Login');
@@ -45,4 +45,8 @@ Route::middleware(['auth'])->group(function() {
             'bookings' => fn () => \App\Http\Resources\TripCarResource::collection(Auth::user()->trips),
         ]);
     })->name('profile');
+
+    Route::apiResources([
+        'users' => App\Http\Controllers\UserController::class
+    ]);
 });

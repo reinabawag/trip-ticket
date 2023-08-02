@@ -21,7 +21,8 @@ class CreateTripsTable extends Migration
             $table->string('passenger')->nullable();
             $table->dateTime('departure');
             $table->dateTime('arrival');
-            $table->boolean('approved');
+            $table->boolean('is_approved')->default(false);
+            $table->boolean('is_active')->default(true);
             $table->foreignId('car_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->timestamps();

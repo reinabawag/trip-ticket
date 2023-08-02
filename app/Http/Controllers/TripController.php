@@ -51,7 +51,6 @@ class TripController extends Controller
             'driver' => 'required',
             'departure' => 'required',
             'arrival' => 'required',
-            'approved' => 'required',
             'car_id' => 'required',
             'passenger' => 'nullable|string'
         ]);
@@ -63,7 +62,6 @@ class TripController extends Controller
                 'driver',
                 'departure',
                 'arrival',
-                'approved',
                 'car_id',
                 'passenger'
             ]

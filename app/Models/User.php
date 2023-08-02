@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'user_id',
     ];
 
     /**
@@ -50,5 +51,10 @@ class User extends Authenticatable
     public function trips()
     {
         return $this->hasMany(Trip::class);
+    }
+
+    public function approver()
+    {
+        return $this->belongsTo(User::class);
     }
 }

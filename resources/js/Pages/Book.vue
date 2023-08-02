@@ -4,7 +4,7 @@
     <Layout>
         <h1>Book</h1>
 
-        <div class="row row-cols-1 row-cols-md-4 g-4 mt-5">
+        <div class="row row-cols-1 row-cols-md-4 g-4">
             <div class="col" v-for="car in cars" :key="car.id">
                 <BookCar :car="car" @btn-clicked="clicked" />
             </div>

@@ -6,7 +6,9 @@ defineProps({
     bookings: Object
 })
 
-
+const row = (booking) => {
+    console.log(booking)
+}
 </script>
 
 <template>
@@ -20,14 +22,14 @@ defineProps({
         <table class="table">
             <thead>
                 <tr>
-                    <td>Plate number</td>
-                    <td>Purpose</td>
-                    <td>Departure</td>
-                    <td>Arrival</td>
+                    <th scope="col">Plate number</th>
+                    <th scope="col">Purpose</th>
+                    <th scope="col">Departure</th>
+                    <th scope="col">Arrival</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="booking in bookings" :id="booking.id">
+                <tr v-for="booking in bookings" :id="booking.id" @click="row(booking)">
                     <td>{{ booking.plate_number }}</td>
                     <td>{{ booking.purpose }}</td>
                     <td>{{ booking.departure }}</td>
@@ -37,3 +39,9 @@ defineProps({
         </table>
     </Layout>
 </template>
+
+<style scoped>
+table tbody tr {
+    cursor: pointer;
+}
+</style>
