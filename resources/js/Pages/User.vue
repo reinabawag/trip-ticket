@@ -20,6 +20,9 @@ const approvers = computed(() => page.props.approvers)
         <h1>Users</h1>
 
         <div class="container">
+            <div v-if="$page.props.flash.message" class="alert">
+                {{ $page.props.flash.message }}
+            </div>
             <div class="row">
                 <div class="col-4">
                     <AddUser :roles="roles" :approvers="approvers" />

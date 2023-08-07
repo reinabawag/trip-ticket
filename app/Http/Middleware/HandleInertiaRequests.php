@@ -40,12 +40,8 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'flash' => [
-                'status' => fn () => $request->session()->get('status')
-            ],
-            'availability' => [
-                'available' => fn () => Car::where('status', 'Active')->count(),
-                'reserved' => fn () => Trip::whereBetween('departure', [$startDay = now(), $startDay->copy()->endOfDay()])->count(),
-                'notAvailable' => fn () => Car::where('status', '!=', 'Active')->count(),
+                'status' => fn () => $request->session()->get('status'),
+                'message' => fn () => $request->session()->get('message')
             ],
             'auth.user' => fn () => $request->user()
                 ? $request->user()->only('id', 'name', 'email')

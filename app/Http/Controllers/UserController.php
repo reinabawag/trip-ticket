@@ -46,19 +46,19 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+        $approver = User::find($request->approver);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
 
-        $user->approver()->associate(User::find($request->approver));
-
-        $user->save();
+        $user->approver()->associate($approver)->save();
 
         $user->roles()->attach($request->only('role'));
 
-        return back()->with(['status', 'Succesfully created!']);
+        return back()->with(['message', 'Succesfully created!']);
     }
 
     /**

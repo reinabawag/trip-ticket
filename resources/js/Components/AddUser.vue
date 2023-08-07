@@ -1,27 +1,34 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3'
 
 defineProps({
     'roles': Object,
     'approvers' : Object
-});
+})
 
 const form = useForm({
     name: null,
     email: null,
     password: null,
     role: 3,
-    approver: null
-});
+    approver: ''
+})
+
+const formSubmit = () => {
+    form.post(route('users.store', { 
+        preserveScroll: true,
+        preserveState: false
+    }))
+}
 
 const change = () => {
-    form.approver = null
+    form.approver = ''
 }
 </script>
 
 <template>
     <div>
-        <form @submit.prevent="form.post($route('users.store', { preserveScroll: (page) => Object.keys(page.props.errors).length }))">
+        <form @submit.prevent="formSubmit">
             <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
                 <input type="text" class="form-control" v-model="form.name" :class="{ 'is-invalid' : form.errors.name }" id="name" placeholder="Name">
@@ -45,9 +52,11 @@ const change = () => {
             </div>
             <div class="mb-3" v-if="form.role == 3">
                 <label for="approver" class="form-label">Approver</label>
-                <select class="form-select" id="approver" v-model="form.approver">
+                <select class="form-select" id="approver" v-model="form.approver" :class="{ 'is-invalid': form.errors.approver }">
+                    <option selected disabled value="">Please select approver</option>
                     <option v-for="(approver, index) in approvers" :key="index" :value="index" v-text="approver"></option>
                 </select>
+                <span class="invalid-feedback" v-text="form.errors.approver"></span>
             </div>
             <button type="submit" class="btn btn-primary">Add</button>
         </form>

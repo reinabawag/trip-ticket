@@ -13,7 +13,7 @@
 <script setup>
 import { ref, computed  } from 'vue'
 import Layout from '../Shared/Layout'
-import { Head, usePage, router  } from '@inertiajs/vue3'
+import { Head, usePage } from '@inertiajs/vue3'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
