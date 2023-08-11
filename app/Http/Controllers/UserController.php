@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Eloquent\Builder;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserRolesResource;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserController extends Controller
 {
@@ -19,6 +19,8 @@ class UserController extends Controller
      */
     public function index()
     {
+        $this->authorize('manage', \App\Models\User::class);
+        
         return Inertia::render('User', [
             'roles' => fn () =>  \App\Models\Role::pluck('name', 'id'),
             'users' => fn () => UserRolesResource::collection(User::with('roles')->get()),
@@ -58,7 +60,7 @@ class UserController extends Controller
 
         $user->roles()->attach($request->only('role'));
 
-        return back()->with(['message', 'Succesfully created!']);
+        return back()->with('message', 'Succesfully created!');
     }
 
     /**

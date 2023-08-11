@@ -19,4 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/books/events', [App\Http\Controllers\TripController::class, 'events']);
-Route::get('/books/{trip}', [App\Http\Controllers\TripController::class, 'show'])->name('trips.show');
+Route::get('/books/{trip}', [App\Http\Controllers\TripController::class, 'show'])->name('api.trips.show');

@@ -1,48 +1,45 @@
-<script>
+<script setup>
+import { ref, computed, nextTick } from 'vue'
 import { Head, useForm } from '@inertiajs/vue3'
 import Layout from '../Shared/Layout.vue'
 
-export default {
-    props: {
-        cars: Array,
-    },
-    components: {
-        Head, Layout,
-    },
-    data() {
-        return {
-            search: '',
-            form: useForm({
-                photo: null,
-                plate_number: null,
-                make: null,
-                model: null,
-                status: 'Active',
-            }),
-        }
-    },
-    computed: {
-        availableCar () {
-            const cars = this.cars.filter((available) => {
-                return available.status.includes('Active');
-            });
+const props = defineProps({
+    cars: Array
+})
 
-            return cars.length
-        },
-        unavailableCar () {
-            const cars = this.cars.filter((available) => {
-                return available.status.includes('Repair');
-            });
+const search = ref('')
 
-            return cars.length
-        },
-        filteredData () {
-            return this.cars.filter(({ plate_number, make, model }) => [plate_number, make, model]
-                .some(val => val.toLowerCase().includes(this.search.toLowerCase()))
-            );
+const form = useForm({
+    photo: null,
+    plate_number: null,
+    make: null,
+    model: null,
+    status: 'Active',
+})
+
+const car = useForm({
+    id: null,
+    status: null
+})
+
+const filteredData = computed(() => {
+    return props.cars.filter(({ plate_number, make, model }) => [plate_number, make, model]
+        .some(val => val.toLowerCase().includes(search.value.toLowerCase()))
+    )
+})
+
+const changeStatus = (carx, event) => {
+    car.id = carx.id
+    car.status = event.target.value
+}
+
+const updateStatus = () => {
+    car.patch(route('cars.update', car.id), {
+        onSuccess: () => {
+            car.id = null
         }
-    }
-};
+    });
+}
 </script>
 
 <template>
@@ -50,6 +47,11 @@ export default {
 
     <Layout>
         <h1>Car Management</h1>
+
+        <div v-if="$page.props.flash.message" class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ $page.props.flash.message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
 
         <div class="row">
             <div class="col-4">
@@ -77,7 +79,7 @@ export default {
                     <div v-if="form.progress" class="progress mb-3" role="progressbar" aria-label="file upload progress" :aria-valuenow="form.progress.percentage" aria-valuemin="0" aria-valuemax="100">
                         <div class="progress-bar" :style="{ width: form.progress.percentage + '%' }" v-text="`${form.progress.percentage}%`"></div>
                     </div>
-                    <button type="submit" class="btn btn-primary mb-3" :disabled="form.processing">Submit</button>
+                    <button type="submit" class="btn btn-success mb-3" :disabled="form.processing"><i class="bi bi-database"></i>&nbsp;Save</button>
                 </form>
             </div>
             <div class="col-8">
@@ -98,12 +100,30 @@ export default {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="car in filteredData" :key="car.id">
-                            <td>{{ car.plate_number }}</td>
-                            <td>{{ car.make }}</td>
-                            <td>{{ car.model }}</td>
-                            <td>{{ car.status }}</td>
-                            <td>{{  }}</td>
+                        <tr v-for="carx in filteredData" :key="carx.id">
+                            <td>{{ carx.plate_number }}</td>
+                            <td>{{ carx.make }}</td>
+                            <td>{{ carx.model }}</td>
+                            <td>
+                                <span v-if="!car.id" v-text="carx.status"></span>
+                                <select v-else-if="car.id && car.id == carx.id" class="form-select" @change="changeStatus(carx, $event)" :value="carx.status">
+                                    <option>Active</option>
+                                    <option>Maintenance</option>
+                                    <option>Repair</option>
+                                    <option>Decommissioned</option>
+                                </select>
+                                <span v-else v-text="carx.status"></span>
+                            </td>
+                            <td>
+                                <div class="d-flex justify-content-center" v-if="!car.id">
+                                    <a class="btn btn-success btn-sm m-auto" href="#" role="button" @click="car.id = carx.id"><i class="bi bi-pencil"></i>&nbsp;Edit</a>
+                                    <a class="btn btn-danger btn-sm m-auto" href="#" role="button"><i class="bi bi-trash"></i>&nbsp;Delete</a>
+                                </div>
+                                <div class="d-flex justify-content-center" v-if="car.isDirty && car.id == carx.id">
+                                    <button type="submit" class="btn btn-success btn-sm m-auto" @click="updateStatus"><i class="bi bi-database"></i>&nbsp;Update</button>
+                                    <button type="reset" class="btn btn-secondary btn-sm m-auto" @click="car.reset()"><i class="bi bi-arrow-counterclockwise"></i>&nbsp;Reset</button>
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

@@ -6,7 +6,7 @@
 
         <div class="row row-cols-1 row-cols-md-4 g-4">
             <div class="col" v-for="car in cars" :key="car.id">
-                <BookCar :car="car" @btn-clicked="clicked" />
+                <BookCar :car="car" @show-modal="clicked" />
             </div>
         </div>
 
@@ -60,9 +60,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" v-if="!$page.props.flash.status" :disabled="form.processing"
-                                class="btn btn-success">Book</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-square"></i>&nbsp;Close</button>
+                            <button type="submit" v-if="!$page.props.flash.status" :disabled="form.processing" class="btn btn-success"><i class="bi bi-calendar-plus"></i>&nbsp;Book</button>
                         </div>
                     </form>
                 </div>
@@ -93,16 +92,22 @@ const form = useForm({
     car_id: null,
 })
 
-const clicked = (car) => {
-    form.car_id = car.id
-    form.plate_number = car.plate_number
-}
-
 onMounted(() => {
     const myModalEl = document.getElementById('modal')
 
     myModalEl.addEventListener('hidden.bs.modal', event => {
-        router.reload({ only: ['flash'] })
+        router.reload({ 
+            only: ['flash'],
+            onFinish: visit  => { 
+                form.clearErrors()
+                form.reset()
+            },
+        })        
     })
 })
+
+const clicked = (car) => {
+    form.car_id = car.id
+    form.plate_number = car.plate_number
+}
 </script>

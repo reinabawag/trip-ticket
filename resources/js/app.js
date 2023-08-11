@@ -3,7 +3,6 @@ require('./bootstrap');
 import {createApp, h} from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
 import { InertiaProgress } from '@inertiajs/progress'
-import "bootstrap";
 
 createInertiaApp({
     resolve: name => require(`./Pages/${name}`),

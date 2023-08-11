@@ -10,8 +10,10 @@ use Carbon\Carbon;
 use App\Http\Resources\TripCollection;
 use App\Http\Resources\TripResource;
 use App\Http\Resources\CarResource;
+use App\Mail\TripBooked;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class TripController extends Controller
 {
@@ -23,7 +25,7 @@ class TripController extends Controller
     public function index()
     {
         return Inertia::render('Book', [
-            'cars' => CarResource::collection(Car::all()),
+            'cars' => CarResource::collection(Car::where('status', '<>', 'Decommissioned')->get()),
         ]);
     }
 
@@ -49,13 +51,31 @@ class TripController extends Controller
             'purpose' => 'required',
             'address' => 'required',
             'driver' => 'required',
-            'departure' => 'required',
-            'arrival' => 'required',
-            'car_id' => 'required',
+            'departure' => [
+                'required',
+                'date',
+                'after:today',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($trip = Trip::where(['car_id' => $request->car_id, $attribute => $value])->first()) {
+                        $fail('Conflict with Booking '.$trip->id.' departure '.date('g:i a', strtotime($trip->departure)).' and arrival of '.date('g:i a', strtotime($trip->arrival)));
+                    }
+                }
+            ],
+            'arrival' => [
+                'required',
+                'date',
+                'after:departure',
+                function ($attribute, $value, $fail) use ($request) {
+                    if ($trip = Trip::where('car_id', $request->car_id)->whereBetween('departure', [$request->departure, $request->arrival])->first()) {
+                        $fail('Conflict with Booking '.$trip->id.' departure '.date('g:i a', strtotime($trip->departure)).' and arrival of '.date('g:i a', strtotime($trip->arrival)));
+                    }
+                }
+            ],
+            'car_id' => 'required|numeric',
             'passenger' => 'nullable|string'
         ]);
 
-        Auth::user()->trips()->save(
+        $trip = Auth::user()->trips()->save(
             new Trip($request->only([
                 'purpose',
                 'address',
@@ -66,6 +86,8 @@ class TripController extends Controller
                 'passenger'
             ]
         )));
+
+        \App\Events\TripBooked::dispatch($trip);
 
         return redirect('/book')->with('status', true);
     }
@@ -89,7 +111,7 @@ class TripController extends Controller
      */
     public function edit(Trip $trip)
     {
-        //
+        $this->authorize('update', $trip);
     }
 
     /**
@@ -101,7 +123,10 @@ class TripController extends Controller
      */
     public function update(Request $request, Trip $trip)
     {
-        //
+        $trip->is_active = false;
+        $trip->save();
+
+        return back()->with('message', 'Trip cancelled!');
     }
 
     /**
@@ -117,8 +142,6 @@ class TripController extends Controller
 
     public function events(Request $request)
     {
-        $trip = Trip::whereBetween('departure', [$request->start, $request->end])->get();
-
-        return new TripCollection($trip);
+        return new TripCollection(Trip::where('is_active', true)->whereBetween('departure', [$request->start, $request->end])->get());
     }
 }

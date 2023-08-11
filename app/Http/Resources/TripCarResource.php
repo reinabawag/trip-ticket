@@ -23,7 +23,9 @@ class TripCarResource extends JsonResource
             'purpose' => $this->purpose,
             'address' => $this->address,
             'driver' => $this->driver,
-            'passenger' => $this->passenger
+            'passenger' => $this->passenger,
+            'is_approved' => $this->is_approved,
+            'is_active' => $this->is_active,
         ];
     }
 }

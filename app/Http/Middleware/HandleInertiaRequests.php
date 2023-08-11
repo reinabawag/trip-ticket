@@ -3,9 +3,8 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
-use App\Models\Car;
-use App\Models\Trip;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -46,6 +45,9 @@ class HandleInertiaRequests extends Middleware
             'auth.user' => fn () => $request->user()
                 ? $request->user()->only('id', 'name', 'email')
                 : null,
+            'can' => [
+                'manage' => Auth::check() && $request->user()->can('manage', User::class),
+            ]
         ]);
     }
 }

@@ -21,7 +21,7 @@ import bootstrap5Plugin from '@fullcalendar/bootstrap5'
 import timeGrid from '@fullcalendar/timegrid'
 import fullCalendarList from '@fullcalendar/list'
 
-const calendarOptions = ref({
+const calendarOptions = {
     plugins: [dayGridPlugin, interactionPlugin, bootstrap5Plugin, timeGrid, fullCalendarList],
     initialView: 'dayGridMonth',
     themeSystem: 'bootstrap5',
@@ -36,7 +36,7 @@ const calendarOptions = ref({
 
         window.open(info.event.url);
     }
-})
+}
 
 const page = usePage()
 

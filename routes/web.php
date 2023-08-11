@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\CarController;
+use App\Http\Controllers\TripController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Models\Trip;
-use App\Models\Car;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -34,11 +34,12 @@ Route::middleware(['auth'])->group(function() {
         Route::get('/book', 'index');
         Route::post('/books', 'store');
     });
-    
-    Route::controller(App\Http\Controllers\CarController::class)->group(function () {
-        Route::get('/cars', 'index');
-        Route::post('/cars', 'store');
-    });
+
+    Route::resources([
+        'cars' => CarController::class,
+        'trips' => TripController::class,
+
+    ]);
 
     Route::get('/profile', function() {
         return Inertia::render('Profile', [

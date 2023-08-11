@@ -1,13 +1,21 @@
 <script setup>
 import Layout from '../Shared/Layout'
-import { Head } from '@inertiajs/vue3'
+import { Head, useForm } from '@inertiajs/vue3'
 
 defineProps({
     bookings: Object
 })
 
-const row = (booking) => {
-    console.log(booking)
+const form = useForm({
+    id: null
+})
+
+const rowClicked = (id) => {
+    form.id = id
+
+    form.patch(route('trips.update', form.id), {
+        onBefore: () => confirm('Are you sure you want to cancel this booking?'),
+    })
 }
 </script>
 
@@ -17,23 +25,32 @@ const row = (booking) => {
     <Layout>
         <h1>Profile</h1>
 
-        <p>My Booking(s)</p>
+        <p>Booking(s)</p>
 
-        <table class="table">
+        <table class="table table-striped table-hover">
             <thead>
                 <tr>
                     <th scope="col">Plate number</th>
                     <th scope="col">Purpose</th>
                     <th scope="col">Departure</th>
                     <th scope="col">Arrival</th>
+                    <th scope="col">Driver</th>
+                    <th scope="col">Passenger</th>
+                    <th scope="col">Options</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="booking in bookings" :id="booking.id" @click="row(booking)">
+                <tr v-for="booking in bookings" :id="booking.id">
                     <td>{{ booking.plate_number }}</td>
                     <td>{{ booking.purpose }}</td>
                     <td>{{ booking.departure }}</td>
                     <td>{{ booking.arrival }}</td>
+                    <td>{{ booking.driver }}</td>
+                    <td>{{ booking.passenger }}</td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-warning" v-if="booking.is_active" @click="rowClicked(booking.id)"><i class="bi bi-x-circle"></i>&nbsp;Cancel</button>
+                        <button type="button" class="btn btn-sm btn-secondary disabled" v-else><i class="bi bi-x-circle"></i>&nbsp;Cancelled</button>           
+                    </td>
                 </tr>
             </tbody>
         </table>

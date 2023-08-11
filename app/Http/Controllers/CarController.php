@@ -16,6 +16,8 @@ class CarController extends Controller
      */
     public function index()
     {
+        $this->authorize('manage', \App\Models\User::class);
+
         return Inertia::render('Car', [
             'cars' => Car::all(),
         ]);
@@ -93,7 +95,11 @@ class CarController extends Controller
      */
     public function update(Request $request, Car $car)
     {
-        //
+        $car->status = $request->status;
+
+        $car->save();
+
+        return back()->with('message', 'Car status updated!');
     }
 
     /**

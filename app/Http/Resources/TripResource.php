@@ -19,7 +19,7 @@ class TripResource extends JsonResource
             'start' => $this->departure,
             'end' => $this->arrival,
             'title' => $this->car->plate_number . ' - '. $this->purpose,
-            'url' => route('trips.show', $this->id),
+            'url' => route('api.trips.show', $this->id),
             'car' => CarResource::make($this->whenLoaded('car')),
         ];
     }

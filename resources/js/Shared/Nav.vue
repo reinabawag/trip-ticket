@@ -20,12 +20,12 @@
                                 <i class="bi bi-book"></i>&nbsp;Book
                             </NavLink>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" v-if="$page.props.can.manage">
                             <NavLink href="/cars" :active="$page.component === 'Car'">
                                 <i class="bi bi-car-front"></i>&nbsp;Car Management
                             </NavLink>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" v-if="$page.props.can.manage">
                             <NavLink href="/users" :active="$page.component === 'User'">
                                 <i class="bi bi-people"></i>&nbsp;User Management
                             </NavLink>
