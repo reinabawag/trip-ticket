@@ -16,10 +16,13 @@ class TripResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'user' => $this->user->name,
             'start' => $this->departure,
             'end' => $this->arrival,
             'title' => $this->car->plate_number . ' - '. $this->purpose,
             'url' => route('api.trips.show', $this->id),
+            'driver' => $this->driver,
+            'passenger' => $this->passenger,
             'car' => CarResource::make($this->whenLoaded('car')),
         ];
     }

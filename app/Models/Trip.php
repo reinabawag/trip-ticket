@@ -9,6 +9,15 @@ class Trip extends Model
 {
     use HasFactory;
 
+    protected $with = ['car'];
+
+    protected $casts = [
+        'departure' => 'datetime',
+        'arrival' => 'datetime',
+        'is_approved' => 'boolean',
+        'is_active' => 'boolean',
+    ];
+
     protected $fillable = [
         'purpose',
         'address',

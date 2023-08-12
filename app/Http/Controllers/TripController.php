@@ -56,7 +56,7 @@ class TripController extends Controller
                 'date',
                 'after:today',
                 function ($attribute, $value, $fail) use ($request) {
-                    if ($trip = Trip::where(['car_id' => $request->car_id, $attribute => $value])->first()) {
+                    if ($trip = Trip::where(['car_id' => $request->car_id, $attribute => $value, 'is_active' => true])->first()) {
                         $fail('Conflict with Booking '.$trip->id.' departure '.date('g:i a', strtotime($trip->departure)).' and arrival of '.date('g:i a', strtotime($trip->arrival)));
                     }
                 }
@@ -66,7 +66,7 @@ class TripController extends Controller
                 'date',
                 'after:departure',
                 function ($attribute, $value, $fail) use ($request) {
-                    if ($trip = Trip::where('car_id', $request->car_id)->whereBetween('departure', [$request->departure, $request->arrival])->first()) {
+                    if ($trip = Trip::where(['car_id' => $request->car_id, 'is_active' => true])->whereBetween('departure', [$request->departure, $request->arrival])->first()) {
                         $fail('Conflict with Booking '.$trip->id.' departure '.date('g:i a', strtotime($trip->departure)).' and arrival of '.date('g:i a', strtotime($trip->arrival)));
                     }
                 }
@@ -123,6 +123,8 @@ class TripController extends Controller
      */
     public function update(Request $request, Trip $trip)
     {
+        $trip->user->notify((new \App\Notifications\TripCanceled($trip))->afterCommit());
+        
         $trip->is_active = false;
         $trip->save();
 

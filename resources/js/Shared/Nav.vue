@@ -17,7 +17,7 @@
                     <template v-if="! $_.isEmpty(user)">
                         <li class="nav-item">
                             <NavLink href="/book" :active="$page.component === 'Book'">
-                                <i class="bi bi-book"></i>&nbsp;Book
+                                <i class="bi bi-calendar-plus"></i>&nbsp;Book
                             </NavLink>
                         </li>
                         <li class="nav-item" v-if="$page.props.can.manage">

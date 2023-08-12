@@ -46,9 +46,6 @@
                         <a class="btn btn-lg btn-light w-100 fs-6" href="/" role="button"><i class="bi bi-house"></i>&nbsp;<small>Back to Home</small></a>
                     </div>
                 </form>
-                <div class="row">
-                    <small>Don't have account? <a href="#">Sign Up</a></small>
-                </div>
           </div>
        </div> 
       </div>

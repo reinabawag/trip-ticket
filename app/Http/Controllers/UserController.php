@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserRolesResource;
@@ -59,6 +60,8 @@ class UserController extends Controller
         $user->approver()->associate($approver)->save();
 
         $user->roles()->attach($request->only('role'));
+
+        event(new Registered($user));
 
         return back()->with('message', 'Succesfully created!');
     }

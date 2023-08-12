@@ -1,6 +1,7 @@
 <script setup>
-import Layout from '../Shared/Layout'
-import { Head, useForm } from '@inertiajs/vue3'
+import { ref } from 'vue';
+import Layout from '../Shared/Layout';
+import { Head, useForm, Link } from '@inertiajs/vue3';
 
 defineProps({
     bookings: Object
@@ -9,6 +10,8 @@ defineProps({
 const form = useForm({
     id: null
 })
+
+const search = ref('');
 
 const rowClicked = (id) => {
     form.id = id
@@ -25,7 +28,14 @@ const rowClicked = (id) => {
     <Layout>
         <h1>Profile</h1>
 
-        <p>Booking(s)</p>
+        <div class="d-flex flex-row justify-content-between align-items-baseline">
+            <div>
+                <p>Booking(s)</p>
+            </div>
+            <div>
+                <input type="text" class="form-control" v-model="search" placeholder="Search">
+            </div>
+        </div>
 
         <table class="table table-striped table-hover">
             <thead>
@@ -40,7 +50,7 @@ const rowClicked = (id) => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="booking in bookings" :id="booking.id">
+                <tr v-if="! $_.isEmpty(bookings.data)" v-for="booking in bookings.data" :id="booking.id">
                     <td>{{ booking.plate_number }}</td>
                     <td>{{ booking.purpose }}</td>
                     <td>{{ booking.departure }}</td>
@@ -49,11 +59,22 @@ const rowClicked = (id) => {
                     <td>{{ booking.passenger }}</td>
                     <td>
                         <button type="button" class="btn btn-sm btn-warning" v-if="booking.is_active" @click="rowClicked(booking.id)"><i class="bi bi-x-circle"></i>&nbsp;Cancel</button>
-                        <button type="button" class="btn btn-sm btn-secondary disabled" v-else><i class="bi bi-x-circle"></i>&nbsp;Cancelled</button>           
+                        <button type="button" class="btn btn-sm btn-secondary disabled" v-else><i class="bi bi-x-circle"></i>&nbsp;Cancel</button>           
                     </td>
+                </tr>
+                <tr v-else>
+                    <td colspan="7" class="text-center">No booking to show!</td>
                 </tr>
             </tbody>
         </table>
+
+        <nav>
+            <ul class="pagination justify-content-end">
+                <li class="page-item" v-for="(link, index) in bookings.meta.links" :key="index" :class="{ active: link.active, disabled: link.url == null }">
+                    <Link class="page-link" :href="String(link.url)" v-html="link.label" />
+                </li>
+            </ul>
+        </nav>
     </Layout>
 </template>
 

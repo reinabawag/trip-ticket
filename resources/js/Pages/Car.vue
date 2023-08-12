@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed, nextTick } from 'vue'
-import { Head, useForm } from '@inertiajs/vue3'
+import { ref, computed } from 'vue'
+import { Head, router, useForm } from '@inertiajs/vue3'
 import Layout from '../Shared/Layout.vue'
 
 const props = defineProps({
@@ -39,6 +39,12 @@ const updateStatus = () => {
             car.id = null
         }
     });
+}
+
+const decomCar = id => {
+    router.delete(route('cars.destroy', id), {
+        onBefore: () => confirm('Are you sure you want to decom this car?'),
+    })
 }
 </script>
 
@@ -117,7 +123,7 @@ const updateStatus = () => {
                             <td>
                                 <div class="d-flex justify-content-center" v-if="!car.id">
                                     <a class="btn btn-success btn-sm m-auto" href="#" role="button" @click="car.id = carx.id"><i class="bi bi-pencil"></i>&nbsp;Edit</a>
-                                    <a class="btn btn-danger btn-sm m-auto" href="#" role="button"><i class="bi bi-trash"></i>&nbsp;Delete</a>
+                                    <a class="btn btn-danger btn-sm m-auto" href="#" role="button" @click.prevent="decomCar(carx.id)"><i class="bi bi-trash"></i>&nbsp;Decom</a>
                                 </div>
                                 <div class="d-flex justify-content-center" v-if="car.isDirty && car.id == carx.id">
                                     <button type="submit" class="btn btn-success btn-sm m-auto" @click="updateStatus"><i class="bi bi-database"></i>&nbsp;Update</button>

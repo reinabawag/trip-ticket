@@ -18,8 +18,8 @@ class TripCarResource extends JsonResource
         return [
             'id' => Str::of($this->id)->padLeft(7, '0'),
             'plate_number' => $this->car->plate_number,
-            'departure' => $this->departure,
-            'arrival' => $this->arrival,
+            'departure' => $this->departure->format('Y-m-d h:i A'),
+            'arrival' => $this->arrival->format('Y-m-d h:i A'),
             'purpose' => $this->purpose,
             'address' => $this->address,
             'driver' => $this->driver,
