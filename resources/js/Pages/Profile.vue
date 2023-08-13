@@ -24,9 +24,9 @@ const rowClicked = (id) => {
 const searchTrips = _.debounce(() => {
     router.reload({
         data: { search: search.value },
-        only: ['bookings']
+        only: ['bookings'],
     })
-}, 1500)
+})
 </script>
 
 <template>

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\TripController;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
@@ -29,13 +30,13 @@ Route::get('/email/verify', function () {
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
- 
+
     return redirect()->route('home');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
- 
+
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
@@ -43,7 +44,7 @@ Route::get('/', function () {
     return Inertia::render('Home');
 })->name('home');
 
-Route::get('/login', function() {
+Route::get('/login', function () {
     return Inertia::render('Login');
 })->name('login');
 
@@ -51,8 +52,8 @@ Route::post('/logout', [\App\Http\Controllers\LoginController::class, 'logout'])
 
 Route::post('/login', [\App\Http\Controllers\LoginController::class, 'authenticate']);
 
-Route::middleware(['auth', 'verified'])->group(function() {
-    Route::controller(App\Http\Controllers\TripController::class)->group(function() {
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::controller(App\Http\Controllers\TripController::class)->group(function () {
         Route::get('/book', 'index');
         Route::post('/books', 'store');
     });
@@ -63,9 +64,11 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
     ]);
 
-    Route::get('/profile', function(Request $request) {
+    Route::get('/profile', function (Request $request) {
         return Inertia::render('Profile', [
-            'bookings' => fn () => \App\Http\Resources\TripCarCollection::make(Auth::user()->trips()->latest()->paginate(10)),
+            'bookings' => fn () => \App\Http\Resources\TripCarCollection::make(
+                Auth::user()->trips()->with('car')->paginate()
+            ),
         ]);
     })->name('profile');
 

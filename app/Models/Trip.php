@@ -9,8 +9,6 @@ class Trip extends Model
 {
     use HasFactory;
 
-    protected $with = ['car'];
-
     protected $casts = [
         'departure' => 'datetime',
         'arrival' => 'datetime',
