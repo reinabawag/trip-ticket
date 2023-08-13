@@ -27,5 +27,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $user->roles()->attach(1);
+
+        \App\Models\Trip::factory()->count(100)->for($user)->create();
+
+        \App\Models\User::factory(10)
+            ->has(\App\Models\Trip::factory()->count(rand(1, 10)))
+            ->create();
     }
 }

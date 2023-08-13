@@ -2,8 +2,8 @@
     <Head title="Home" />
 
     <Layout>
-        <h1>Hello, {{ ! $_.isEmpty(user) ? user.name : 'User' }}</h1>
-        
+        <h1>Home</h1>
+
         <div class="d-flex justify-content-center">
             <FullCalendar :options="calendarOptions" class="w-100" />
         </div>
@@ -32,9 +32,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted  } from 'vue'
+import { ref, onMounted } from 'vue'
 import Layout from '../Shared/Layout'
-import { Head, usePage } from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -55,7 +55,7 @@ const calendarOptions = {
     events: '/api/books/events',
     eventClick: function (info) {
         info.jsEvent.preventDefault();
-        
+
         trip.value.title = info.event.title;
         trip.value.user = info.event.extendedProps.user;
         trip.value.start = info.event.start;
@@ -65,7 +65,7 @@ const calendarOptions = {
 
         modal.value.show();
     },
-    eventDidMount: function(info) {
+    eventDidMount: function (info) {
         console.log(info);
         new Tooltip(info.el, {
             title: info.event.title,
@@ -75,10 +75,6 @@ const calendarOptions = {
         });
     }
 }
-
-const page = usePage()
-
-const user = computed(() => page.props.auth.user)
 
 const modal = ref(null)
 

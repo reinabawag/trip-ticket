@@ -63,7 +63,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
     ]);
 
-    Route::get('/profile', function() {
+    Route::get('/profile', function(Request $request) {
         return Inertia::render('Profile', [
             'bookings' => fn () => \App\Http\Resources\TripCarCollection::make(Auth::user()->trips()->latest()->paginate(10)),
         ]);

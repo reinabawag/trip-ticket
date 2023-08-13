@@ -4,7 +4,8 @@
             <a href="#" class="navbar-brand">
                 <img src="/img/logoipsum-298.svg" alt="Bootstrap" width="30" height="24">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -14,7 +15,7 @@
                             <i class="bi bi-house"></i>&nbsp;Home
                         </NavLink>
                     </li>
-                    <template v-if="! $_.isEmpty(user)">
+                    <template v-if="!$_.isEmpty(user)">
                         <li class="nav-item">
                             <NavLink href="/book" :active="$page.component === 'Book'">
                                 <i class="bi bi-calendar-plus"></i>&nbsp;Book
@@ -32,7 +33,7 @@
                         </li>
                         <li class="nav-item">
                             <NavLink href="/profile" :active="$page.component === 'Profile'">
-                                <i class="bi bi-person"></i>&nbsp;Profile
+                                <i class="bi bi-person"></i>&nbsp;{{ user.name }}
                             </NavLink>
                         </li>
                     </template>
@@ -53,7 +54,7 @@
 </template>
 
 <script setup>
-import {computed } from 'vue'
+import { computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import NavLink from './NavLink'
 

@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import Layout from '../Shared/Layout';
-import { Head, useForm, Link } from '@inertiajs/vue3';
+import { Head, useForm, Link, router } from '@inertiajs/vue3';
 
 defineProps({
     bookings: Object
@@ -20,6 +20,13 @@ const rowClicked = (id) => {
         onBefore: () => confirm('Are you sure you want to cancel this booking?'),
     })
 }
+
+const searchTrips = _.debounce(() => {
+    router.reload({
+        data: { search: search.value },
+        only: ['bookings']
+    })
+}, 1500)
 </script>
 
 <template>
@@ -33,7 +40,7 @@ const rowClicked = (id) => {
                 <p>Booking(s)</p>
             </div>
             <div>
-                <input type="text" class="form-control" v-model="search" placeholder="Search">
+                <input type="text" class="form-control" v-model="search" @keyup="searchTrips($event)" placeholder="Search">
             </div>
         </div>
 
@@ -50,7 +57,7 @@ const rowClicked = (id) => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-if="! $_.isEmpty(bookings.data)" v-for="booking in bookings.data" :id="booking.id">
+                <tr v-if="!$_.isEmpty(bookings.data)" v-for="booking in bookings.data" :id="booking.id">
                     <td>{{ booking.plate_number }}</td>
                     <td>{{ booking.purpose }}</td>
                     <td>{{ booking.departure }}</td>
@@ -58,8 +65,10 @@ const rowClicked = (id) => {
                     <td>{{ booking.driver }}</td>
                     <td>{{ booking.passenger }}</td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-warning" v-if="booking.is_active" @click="rowClicked(booking.id)"><i class="bi bi-x-circle"></i>&nbsp;Cancel</button>
-                        <button type="button" class="btn btn-sm btn-secondary disabled" v-else><i class="bi bi-x-circle"></i>&nbsp;Cancel</button>           
+                        <button type="button" class="btn btn-sm btn-warning" v-if="booking.is_active"
+                            @click="rowClicked(booking.id)"><i class="bi bi-x-circle"></i>&nbsp;Cancel</button>
+                        <button type="button" class="btn btn-sm btn-secondary disabled" v-else><i
+                                class="bi bi-x-circle"></i>&nbsp;Cancel</button>
                     </td>
                 </tr>
                 <tr v-else>
@@ -70,8 +79,10 @@ const rowClicked = (id) => {
 
         <nav>
             <ul class="pagination justify-content-end">
-                <li class="page-item" v-for="(link, index) in bookings.meta.links" :key="index" :class="{ active: link.active, disabled: link.url == null }">
-                    <Link class="page-link" :href="String(link.url)" v-html="link.label" />
+                <li class="page-item" v-for="(link, index) in bookings.meta.links" :key="index"
+                    :class="{ active: link.active, disabled: link.url == null }">
+                    <Link class="page-link" :href="String(link.url)" :only="['bookings']" :data="{ search: search }"
+                        preserve-scroll preserve-state v-html="link.label" />
                 </li>
             </ul>
         </nav>
