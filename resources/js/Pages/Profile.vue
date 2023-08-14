@@ -25,7 +25,7 @@ const searchTrips = _.debounce(() => {
     router.reload({
         data: { search: search.value },
         only: ['bookings'],
-    })
+    }, 300)
 })
 </script>
 

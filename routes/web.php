@@ -67,7 +67,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', function (Request $request) {
         return Inertia::render('Profile', [
             'bookings' => fn () => \App\Http\Resources\TripCarCollection::make(
-                Auth::user()->trips()->with('car')->paginate()
+                Auth::user()->trips()->with('car')->where(function($query) use ($request) {
+                    $query->where('purpose', 'like', '%'.$request->search.'%')
+                        ->orWhere('departure', 'like', '%'.$request->search.'%')
+                        ->orWhere('arrival', 'like', '%'.$request->search.'%')
+                        ->orWhere('passenger', 'like', '%'.$request->search.'%')
+                        ->orWhere('driver', 'like', '%'.$request->search.'%');
+                })
+                ->orWhereHas('car', function($query) use ($request) {
+                    $query->where('plate_number', 'like', '%'.$request->search.'%');
+                })
+                ->latest()
+                ->paginate()
             ),
         ]);
     })->name('profile');

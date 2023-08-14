@@ -23317,7 +23317,7 @@ __webpack_require__.r(__webpack_exports__);
           search: search.value
         },
         only: ['bookings']
-      });
+      }, 300);
     });
     var __returned__ = {
       form: form,
