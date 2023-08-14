@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -30,8 +31,16 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\Trip::factory()->count(100)->for($user)->create();
 
+        $roles = Role::all()->random(1);
+
         \App\Models\User::factory(10)
-            ->has(\App\Models\Trip::factory()->count(rand(1, 10)))
+            ->has(\App\Models\Trip::factory()->count(rand(1, 100)))
+            ->hasAttached(Role::find(2))
+            ->create();
+
+        \App\Models\User::factory(rand(1, 100))
+            ->has(\App\Models\Trip::factory()->count(rand(1, 100)))
+            ->hasAttached(Role::find(3))
             ->create();
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\TripController;
+use App\Http\Resources\TripCarCollection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -66,20 +67,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/profile', function (Request $request) {
         return Inertia::render('Profile', [
-            'bookings' => fn () => \App\Http\Resources\TripCarCollection::make(
-                Auth::user()->trips()->with('car')->where(function($query) use ($request) {
-                    $query->where('purpose', 'like', '%'.$request->search.'%')
-                        ->orWhere('departure', 'like', '%'.$request->search.'%')
-                        ->orWhere('arrival', 'like', '%'.$request->search.'%')
-                        ->orWhere('passenger', 'like', '%'.$request->search.'%')
-                        ->orWhere('driver', 'like', '%'.$request->search.'%');
-                })
-                ->orWhereHas('car', function($query) use ($request) {
-                    $query->where('plate_number', 'like', '%'.$request->search.'%');
-                })
-                ->latest()
-                ->paginate()
-            ),
+            'bookings' => fn () => TripCarCollection::make(Auth::user()->trips()->with('car')->where(function ($query) use ($request) {
+                $query->where('purpose', 'like', '%' . $request->search . '%')
+                    ->orWhere('departure', 'like', '%' . $request->search . '%')
+                    ->orWhere('arrival', 'like', '%' . $request->search . '%')
+                    ->orWhere('passenger', 'like', '%' . $request->search . '%')
+                    ->orWhere('driver', 'like', '%' . $request->search . '%')
+                    ->orWhereHas('car', function ($query) use ($request) {
+                        $query->where('plate_number', 'like', '%' . $request->search . '%');
+                    });
+            })->paginate()),
         ]);
     })->name('profile');
 

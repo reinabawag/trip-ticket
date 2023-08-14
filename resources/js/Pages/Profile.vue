@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import Layout from '../Shared/Layout';
 import { Head, useForm, Link, router } from '@inertiajs/vue3';
 
@@ -11,7 +11,7 @@ const form = useForm({
     id: null
 })
 
-const search = ref('');
+const search = ref(route().params.search);
 
 const rowClicked = (id) => {
     form.id = id
@@ -21,12 +21,12 @@ const rowClicked = (id) => {
     })
 }
 
-const searchTrips = _.debounce(() => {
+watch(search, _.debounce(() => {
     router.reload({
-        data: { search: search.value },
+        data: { search: search.value, page: 1 },
         only: ['bookings'],
-    }, 300)
-})
+    })
+}, 500))
 </script>
 
 <template>
@@ -40,7 +40,7 @@ const searchTrips = _.debounce(() => {
                 <p>Booking(s)</p>
             </div>
             <div>
-                <input type="text" class="form-control" v-model="search" @keyup="searchTrips($event)" placeholder="Search">
+                <input type="text" class="form-control" v-model="search" placeholder="Search">
             </div>
         </div>
 
