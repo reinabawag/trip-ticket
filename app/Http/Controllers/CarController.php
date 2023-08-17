@@ -110,6 +110,8 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
-        return $car;
+        $car->delete();
+
+        return back()->with('message', 'Car decommissioned!');
     }
 }

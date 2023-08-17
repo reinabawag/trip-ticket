@@ -58,7 +58,7 @@ watch(search, _.debounce(() => {
             </thead>
             <tbody>
                 <tr v-if="!$_.isEmpty(bookings.data)" v-for="booking in bookings.data" :id="booking.id">
-                    <td>{{ booking.plate_number }}</td>
+                    <td>{{ booking.car.plate_number }}</td>
                     <td>{{ booking.purpose }}</td>
                     <td>{{ booking.departure }}</td>
                     <td>{{ booking.arrival }}</td>

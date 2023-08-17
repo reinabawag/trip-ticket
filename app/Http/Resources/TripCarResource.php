@@ -17,7 +17,6 @@ class TripCarResource extends JsonResource
     {
         return [
             'id' => Str::of($this->id)->padLeft(7, '0'),
-            'plate_number' => $this->car->plate_number,
             'departure' => $this->departure->format('Y-m-d h:i A'),
             'arrival' => $this->arrival->format('Y-m-d h:i A'),
             'purpose' => $this->purpose,
@@ -26,6 +25,7 @@ class TripCarResource extends JsonResource
             'passenger' => $this->passenger,
             'is_approved' => $this->is_approved,
             'is_active' => $this->is_active,
+            'car' => CarResource::make($this->whenLoaded('car')),
         ];
     }
 }
