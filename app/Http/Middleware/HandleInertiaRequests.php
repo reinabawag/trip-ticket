@@ -47,6 +47,7 @@ class HandleInertiaRequests extends Middleware
                 : null,
             'can' => [
                 'manage' => Auth::check() && $request->user()->can('manage', User::class),
+                'approve' => Auth::check() && $request->user()->can('approve', User::class),
             ]
         ]);
     }

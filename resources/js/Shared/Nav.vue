@@ -31,6 +31,11 @@
                                 <i class="bi bi-people"></i>&nbsp;User Management
                             </NavLink>
                         </li>
+                        <li class="nav-item" v-if="$page.props.can.approve">
+                            <NavLink href="/approvals" :active="$page.component === 'Approval'">
+                                <i class="bi bi-calendar-check"></i>&nbsp;Approvals
+                            </NavLink>
+                        </li>
                         <li class="nav-item">
                             <NavLink href="/profile" :active="$page.component === 'Profile'">
                                 <i class="bi bi-person"></i>&nbsp;{{ user.name }}

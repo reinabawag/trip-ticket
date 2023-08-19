@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 import Layout from '../Shared/Layout';
-import { Head, useForm, Link, router } from '@inertiajs/vue3';
+import { Head, useForm, Link, router, usePage } from '@inertiajs/vue3';
 
 defineProps({
     bookings: Object
@@ -11,7 +11,9 @@ const form = useForm({
     id: null
 })
 
-const search = ref(route().params.search);
+const page = usePage();
+
+const search = ref(page.props.search);
 
 const rowClicked = (id) => {
     form.id = id

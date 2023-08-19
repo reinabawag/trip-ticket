@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
 class TripCarResource extends JsonResource
@@ -16,6 +17,7 @@ class TripCarResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'name' => $this->user->name,
             'id' => Str::of($this->id)->padLeft(7, '0'),
             'departure' => $this->departure->format('Y-m-d h:i A'),
             'arrival' => $this->arrival->format('Y-m-d h:i A'),
