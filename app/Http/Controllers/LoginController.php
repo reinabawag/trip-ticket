@@ -18,7 +18,7 @@ class LoginController extends Controller
         if (Auth::attempt($request->only(['email', 'password']), $request->remember)) {
             $request->session()->regenerate();
  
-            return redirect()->intended('/book');
+            return redirect()->intended(route('home'));
         }
 
         return back()->withErrors([
