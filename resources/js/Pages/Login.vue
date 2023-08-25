@@ -43,7 +43,8 @@
                         <button class="btn btn-lg btn-primary w-100 fs-6">Login</button>
                     </div>
                     <div class="input-group mb-3">
-                        <a class="btn btn-lg btn-light w-100 fs-6" href="/" role="button"><i class="bi bi-house"></i>&nbsp;<small>Back to Home</small></a>
+                        <!-- <a class="btn btn-lg btn-light w-100 fs-6" href="/" role="button"><i class="bi bi-house"></i>&nbsp;<small>Back to Home</small></a> -->
+                        <Link class="btn btn-lg btn-light w-100 fs-6" href="/" role="button"><i class="bi bi-house"></i>&nbsp;<small>Back to Home</small></Link>
                     </div>
                 </form>
           </div>
@@ -53,7 +54,7 @@
 </template>
 
 <script setup>
-import { useForm, Head } from '@inertiajs/vue3';
+import { useForm, Head, Link } from '@inertiajs/vue3';
 
 const form = useForm({
     email: null,
