@@ -4,9 +4,7 @@
     <Layout>
         <h1>Home</h1>
 
-        <div class="d-flex justify-content-center">
-            <FullCalendar :options="calendarOptions" class="w-100" />
-        </div>
+        <FullCalendar :options="calendarOptions" />
 
         <div class="modal" tabindex="-1">
             <div class="modal-dialog">
@@ -66,7 +64,6 @@ const calendarOptions = {
         modal.value.show();
     },
     eventDidMount: function (info) {
-        console.log(info);
         new Tooltip(info.el, {
             title: info.event.title,
             placement: 'auto',

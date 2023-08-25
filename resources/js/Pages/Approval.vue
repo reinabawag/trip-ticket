@@ -18,6 +18,10 @@ watch(search, _.debounce(() => {
         only: ['approvals'],
     })
 }, 500))
+
+const approveTrip = (id, status) => {
+    router.put(route('trips.approval', id), {status: status})
+} 
 </script>
 
 <template>
@@ -58,20 +62,20 @@ watch(search, _.debounce(() => {
                     <td>{{ approval.driver }}</td>
                     <td>{{ approval.passenger }}</td>
                     <td>
-                        <div class="btn-group" v-if="approval.is_active">
-                            <button type="button" class="btn btn-sm btn-success" v-if="approval.is_active"
-                                @click="rowClicked(approval.id)"><i class="bi bi-check-circle"></i> Approve</button>
-                            <button type="button" class="btn btn-sm btn-danger" @click="rowClicked(approval.id)"><i
+                        <div class="btn-group" v-if="approval.is_active && approval.is_approved == false">
+                            <button type="button" class="btn btn-sm btn-success"
+                                @click="approveTrip(approval.id, true)"><i class="bi bi-check-circle"></i> Approve</button>
+                            <button type="button" class="btn btn-sm btn-danger" @click="approveTrip(approval.id, false)"><i
                                     class="bi bi-x-circle"></i> Reject</button>
                         </div>
                         <div class="d-grid gap-2" v-else>
-                            <button type="button" class="btn btn-sm btn-secondary disabled btn-block"><i
-                                    class="bi bi-x-circle"></i>&nbsp;Approve</button>
+                            <button type="button" class="btn btn-sm disabled btn-block" :class="approval.is_approved ? 'btn-success' : 'btn-warning'"><i
+                                    :class="['bi', approval.is_approved ? 'bi-check-circle' : 'bi-x-circle']"></i>&nbsp;{{ approval.is_approved ? 'Approved' : 'Canceled' }}</button>
                         </div>
                     </td>
                 </tr>
                 <tr v-else>
-                    <td colspan="7" class="text-center">No booking to show!</td>
+                    <td colspan="8" class="text-center">No booking to show!</td>
                 </tr>
             </tbody>
         </table>

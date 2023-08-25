@@ -31,7 +31,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('approve', function (User $user) {
-            return in_array(2, $user->roles->pluck('id')->toArray());
+            return in_array($user->roles->first()->id, [1, 2]);
         });
     }
 }

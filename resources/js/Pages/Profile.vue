@@ -55,6 +55,7 @@ watch(search, _.debounce(() => {
                     <th scope="col">Arrival</th>
                     <th scope="col">Driver</th>
                     <th scope="col">Passenger</th>
+                    <th scope="col">Status</th>
                     <th scope="col">Options</th>
                 </tr>
             </thead>
@@ -67,14 +68,20 @@ watch(search, _.debounce(() => {
                     <td>{{ booking.driver }}</td>
                     <td>{{ booking.passenger }}</td>
                     <td>
+                        <span v-if="booking.is_active && !booking.is_approved">For Approval</span>
+                        <span v-if="booking.is_active && booking.is_approved">Approved</span>
+                        <span v-if="!booking.is_active && booking.is_approved">Approved</span>
+                        <span v-if="!booking.is_active && !booking.is_approved">Canceled</span>
+                    </td>
+                    <td>
                         <button type="button" class="btn btn-sm btn-warning" v-if="booking.is_active"
                             @click="rowClicked(booking.id)"><i class="bi bi-x-circle"></i>&nbsp;Cancel</button>
-                        <button type="button" class="btn btn-sm btn-secondary disabled" v-else><i
-                                class="bi bi-x-circle"></i>&nbsp;Cancel</button>
+                        <button type="button" class="btn btn-sm btn-warning disabled" v-else><i
+                                class="bi bi-x-circle"></i>&nbsp;Canceled</button>
                     </td>
                 </tr>
                 <tr v-else>
-                    <td colspan="7" class="text-center">No booking to show!</td>
+                    <td colspan="8" class="text-center">No booking to show!</td>
                 </tr>
             </tbody>
         </table>

@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\TripController;
-use App\Http\Resources\TripApprovalCollection;
 use App\Http\Resources\TripCarCollection;
+use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
@@ -65,21 +65,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     ]);
 
     Route::get('/profile', function (Request $request) {
-
-        // return Auth::user()->trips()->with(['car' => function ($query) {
-        //     $query->withTrashed();
-        // }])->where(function ($query) use ($request) {
-        //     $query->where('purpose', 'like', '%' . $request->search . '%')
-        //         ->orWhere('departure', 'like', '%' . $request->search . '%')
-        //         ->orWhere('arrival', 'like', '%' . $request->search . '%')
-        //         ->orWhere('passenger', 'like', '%' . $request->search . '%')
-        //         ->orWhere('driver', 'like', '%' . $request->search . '%')
-        //         ->orWhereHas('car', function ($query) use ($request) {
-        //             $query->withTrashed();
-        //             $query->where('plate_number', 'like', '%' . $request->search . '%');
-        //         });
-        // })->get();
-
         return Inertia::render('Profile', [
             'bookings' => fn () => TripCarCollection::make(Auth::user()->trips()->with(['car' => function ($query) {
                 $query->withTrashed();
@@ -117,12 +102,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         ->orWhereHas('user', function ($query) use ($request) {
                             $query->where('name', 'like', '%' . $request->search . '%');
                         });
-                })->whereHas('user', function ($query) use ($request) {
-                    $query->whereBelongsTo(Auth::user(), 'approver');
-                })->with(['user', 'car' => fn($query) => $query->withTrashed()])
+                })->whereHas('user', function ($query) use ($request){
+                    $query->when($request->user()->can('approve') && $request->user()->cannot('manage'), function($query) {
+                        $query->whereBelongsTo(Auth::user(), 'approver');
+                    });                    
+                })->with(['user', 'car' => fn ($query) => $query->withTrashed()])
                     ->latest()->paginate()
             ),
-            'search' => fn() => $request->search,
+            'search' => fn () => $request->search,
         ]);
     })->can('approve', \App\Models\User::class);
+
+    Route::put('/approvals/{trip}', [\App\Http\Controllers\TripController::class, 'approveTrip'])->name('trips.approval')->can('approve', \App\Models\User::class);
+
+    Route::get('/scan', function() {
+        return Inertia::render('Scan');
+    });
 });

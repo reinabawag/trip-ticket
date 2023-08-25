@@ -146,4 +146,24 @@ class TripController extends Controller
             ->whereBetween('departure', [$request->start, $request->end])
             ->get());
     }
+
+    public function approveTrip(Request $request, Trip $trip)
+    {
+        if ($request->status) {
+            $trip->user->notify((new \App\Notifications\TripApproved($trip))->afterCommit());
+
+            $trip->is_approved = true;
+            $trip->save();
+            
+            return redirect()->back()->with('message', 'Trip Approved!');
+        } else {
+            $trip->user->notify((new \App\Notifications\TripCanceled($trip))->afterCommit());
+
+            $trip->is_approved = false;
+            $trip->is_active = false;
+            $trip->save();
+
+            return redirect()->back()->with('message', 'Trip Canceled!');
+        }
+    }
 }
