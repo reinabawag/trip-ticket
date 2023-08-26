@@ -26,10 +26,11 @@ const filteredData = computed(() => {
     <Layout>
         <h1>Users</h1>
 
-        <div v-if="$page.props.flash.message" class="alert">
+        <div v-if="$page.props.flash.message" class="alert alert-success alert-dismissible fade show" role="alert">
             {{ $page.props.flash.message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        
+
         <div class="row">
             <div class="col-4">
                 <AddUser :roles="roles" :approvers="approvers" />
@@ -48,8 +49,8 @@ const filteredData = computed(() => {
                             <th class="col">Role</th>
                         </tr>
                     </thead>
-                    <tbody> 
-                        <RowUser v-for="user in filteredData" :key="user.id" :user="user"/>
+                    <tbody>
+                        <RowUser v-for="user in filteredData" :key="user.id" :user="user" />
                     </tbody>
                 </table>
             </div>

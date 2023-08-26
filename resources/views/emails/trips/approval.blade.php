@@ -17,7 +17,7 @@ For your approval!
     Passenger: {{ $trip->passenger }}
 </p>
 
-@component('mail::button', ['url' => route('profile')])
+@component('mail::button', ['url' => route('trips.approvals')])
 Click to approve
 @endcomponent
 

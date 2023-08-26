@@ -86,6 +86,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         'users' => App\Http\Controllers\UserController::class
     ]);
 
+    // Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+
     Route::get('/approvals', function (Request $request) {
         return Inertia::render('Approval', [
             'approvals' => fn () => TripCarCollection::make(
@@ -111,7 +113,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ),
             'search' => fn () => $request->search,
         ]);
-    })->can('approve', \App\Models\User::class);
+    })->can('approve', \App\Models\User::class)->name('trips.approvals');
 
     Route::put('/approvals/{trip}', [\App\Http\Controllers\TripController::class, 'approveTrip'])->name('trips.approval')->can('approve', \App\Models\User::class);
 

@@ -63,7 +63,7 @@ class UserController extends Controller
 
         event(new Registered($user));
 
-        return back()->with('message', 'Succesfully created!');
+        return redirect()->back()->with('message', 'Succesfully created!');
     }
 
     /**

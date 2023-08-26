@@ -26,7 +26,7 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:App\Models\User,email',
             'password' => 'required|min:8',
             'role' => 'required|integer',
             'approver' => 'exclude_unless:role,3|required|integer'
