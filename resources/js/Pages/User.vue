@@ -31,7 +31,7 @@ const filteredData = computed(() => {
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
-        <div class="row">
+        <div class="row" scroll-region>
             <div class="col-4">
                 <AddUser :roles="roles" :approvers="approvers" />
             </div>

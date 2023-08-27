@@ -17,11 +17,18 @@ const form = useForm({
 const change = () => {
     form.approver = ''
 }
+
+const submit = () => {
+    form.post(route('users.store'), {
+        preserveScroll: true,
+        onSuccess: () => form.reset(),
+    })
+}
 </script>
 
 <template>
     <div>
-        <form @submit.prevent="form.post($route('users.store', { preserveScroll }))">
+        <form @submit.prevent="submit">
             <div class="mb-3">
                 <label for="name" class="form-label fw-bolder">Name</label>
                 <input type="text" class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.name }"

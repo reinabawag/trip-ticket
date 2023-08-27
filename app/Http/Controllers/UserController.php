@@ -21,13 +21,13 @@ class UserController extends Controller
     public function index()
     {
         $this->authorize('manage', \App\Models\User::class);
-        
+
         return Inertia::render('User', [
             'roles' => fn () =>  \App\Models\Role::pluck('name', 'id'),
             'users' => fn () => UserRolesResource::collection(User::with('roles')->get()),
-            'approvers' => fn () => User::whereHas('roles', function(Builder $query) {
-                    $query->whereIn('id', [1, 2]);
-                })->pluck('name', 'id')
+            'approvers' => fn () => User::whereHas('roles', function (Builder $query) {
+                $query->whereIn('id', [1, 2]);
+            })->pluck('name', 'id')
         ]);
     }
 
@@ -63,7 +63,7 @@ class UserController extends Controller
 
         event(new Registered($user));
 
-        return redirect()->back()->with('message', 'Succesfully created!');
+        return redirect()->back()->with('message', 'User created!');
     }
 
     /**

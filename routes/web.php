@@ -46,6 +46,10 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/login', function () {
+    if (Auth::check()) {
+        return redirect()->route('home');
+    }
+
     return Inertia::render('Login');
 })->name('login');
 
@@ -104,10 +108,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         ->orWhereHas('user', function ($query) use ($request) {
                             $query->where('name', 'like', '%' . $request->search . '%');
                         });
-                })->whereHas('user', function ($query) use ($request){
-                    $query->when($request->user()->can('approve') && $request->user()->cannot('manage'), function($query) {
+                })->whereHas('user', function ($query) use ($request) {
+                    $query->when($request->user()->can('approve') && $request->user()->cannot('manage'), function ($query) {
                         $query->whereBelongsTo(Auth::user(), 'approver');
-                    });                    
+                    });
                 })->with(['user', 'car' => fn ($query) => $query->withTrashed()])
                     ->latest()->paginate()
             ),
@@ -117,7 +121,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::put('/approvals/{trip}', [\App\Http\Controllers\TripController::class, 'approveTrip'])->name('trips.approval')->can('approve', \App\Models\User::class);
 
-    Route::get('/scan', function() {
+    Route::get('/scan', function () {
         return Inertia::render('Scan');
     });
 });
