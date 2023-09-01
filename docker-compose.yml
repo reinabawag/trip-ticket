@@ -1,30 +1,12 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-    nginx:
-        image: 'nginx:latest'
-        ports:
-            - '${HTTP_PORT:-8000}:80'
-            - '${SSL_PORT:-443}:443'
-        environment:
-            - SSL_PORT=${SSL_PORT:-443}
-            - APP_SERVICE=${APP_SERVICE:-laravel.test}
-            - SERVER_NAME=${SERVER_NAME:-localhost}
-        volumes:
-            - 'sail-nginx:/etc/nginx/certs'
-            - './vendor/ryoluo/sail-ssl/nginx/templates:/etc/nginx/templates'
-            - './vendor/ryoluo/sail-ssl/nginx/generate-ssl-cert.sh:/docker-entrypoint.d/99-generate-ssl-cert.sh'
-        depends_on:
-            - ${APP_SERVICE:-laravel.test}
-        networks:
-            - sail
     laravel.test:
         build:
             context: ./vendor/laravel/sail/runtimes/7.4
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
-                NODE_VERSION: '18'
         image: sail-7.4/app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
@@ -43,7 +25,6 @@ services:
         depends_on:
             - mysql
             - mailpit
-            - phpmyadmin
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
@@ -61,7 +42,7 @@ services:
         networks:
             - sail
         healthcheck:
-            test: [ "CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}" ]
+            test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
             retries: 3
             timeout: 5s
     mailpit:
@@ -71,19 +52,9 @@ services:
             - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
         networks:
             - sail
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin:latest
-        ports:
-            - 8080:80
-        networks:
-            - sail
-        environment:
-            - PMA_ARBITRARY=1
 networks:
     sail:
         driver: bridge
 volumes:
-    sail-nginx:
-        driver: local
     sail-mysql:
         driver: local

@@ -41,14 +41,14 @@ class DatabaseSeeder extends Seeder
         $user2->roles()->attach(1);
 
         $approvers = \App\Models\User::factory(2)
-            // ->has(\App\Models\Trip::factory()->count(10))
+            ->has(\App\Models\Trip::factory()->count(10))
             ->hasAttached(Role::find(2))
             ->create();
 
         $approvers->each(function ($approver) {
             \App\Models\User::factory(2)
                 ->for($approver, 'approver')
-                // ->has(\App\Models\Trip::factory()->count(20))
+                ->has(\App\Models\Trip::factory()->count(20))
                 ->hasAttached(Role::find(3))
                 ->create();
         });

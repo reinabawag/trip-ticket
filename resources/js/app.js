@@ -7,7 +7,7 @@ createInertiaApp({
     progress: {
         showSpinner: true,
     },
-    resolve: name => require(`./Pages/${name}`),
+    resolve: async name => (await import(`./Pages/${name}`)).default,
     title: title => `${title} - Trip Ticket v0.5`,
     setup({el, App, props, plugin}) {
         const app = createApp({render: () => h(App, props)})
