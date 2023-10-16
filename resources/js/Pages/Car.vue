@@ -138,7 +138,8 @@ const decomCar = id => {
                                         @click.prevent="decomCar(carx.id)"><i class="bi bi-trash"></i>&nbsp;Decom</a>
                                 </div>
                                 <div class="d-flex justify-content-center" v-if="car.isDirty && car.id == carx.id">
-                                    <button type="submit" class="btn btn-success btn-sm m-auto" @click="updateStatus"><i
+                                    <button type="submit" class="btn btn-success btn-sm m-auto"
+                                        :class="{ disabled: car.status == null }" @click="updateStatus"><i
                                             class="bi bi-database"></i>&nbsp;Update</button>
                                     <button type="reset" class="btn btn-secondary btn-sm m-auto" @click="car.reset()"><i
                                             class="bi bi-arrow-counterclockwise"></i>&nbsp;Reset</button>

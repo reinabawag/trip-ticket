@@ -20,7 +20,7 @@ watch(search, _.debounce(() => {
 }, 500))
 
 const approveTrip = (id, status) => {
-    router.put(route('trips.approval', id), {status: status})
+    router.put(route('trips.approval', id), { status: status }, { preserveScroll: true })
 } 
 </script>
 
@@ -63,14 +63,16 @@ const approveTrip = (id, status) => {
                     <td>{{ approval.passenger }}</td>
                     <td>
                         <div class="btn-group" v-if="approval.is_active && approval.is_approved == false">
-                            <button type="button" class="btn btn-sm btn-success"
-                                @click="approveTrip(approval.id, true)"><i class="bi bi-check-circle"></i> Approve</button>
+                            <button type="button" class="btn btn-sm btn-success" @click="approveTrip(approval.id, true)"><i
+                                    class="bi bi-check-circle"></i> Approve</button>
                             <button type="button" class="btn btn-sm btn-danger" @click="approveTrip(approval.id, false)"><i
                                     class="bi bi-x-circle"></i> Reject</button>
                         </div>
                         <div class="d-grid gap-2" v-else>
-                            <button type="button" class="btn btn-sm disabled btn-block" :class="approval.is_approved ? 'btn-success' : 'btn-warning'"><i
-                                    :class="['bi', approval.is_approved ? 'bi-check-circle' : 'bi-x-circle']"></i>&nbsp;{{ approval.is_approved ? 'Approved' : 'Canceled' }}</button>
+                            <button type="button" class="btn btn-sm disabled btn-block"
+                                :class="approval.is_approved ? 'btn-success' : 'btn-warning'"><i
+                                    :class="['bi', approval.is_approved ? 'bi-check-circle' : 'bi-x-circle']"></i>&nbsp;{{
+                                        approval.is_approved ? 'Approved' : 'Canceled' }}</button>
                         </div>
                     </td>
                 </tr>
