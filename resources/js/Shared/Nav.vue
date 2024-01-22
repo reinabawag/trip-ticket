@@ -27,7 +27,7 @@
                             </NavLink>
                         </li>
                         <li class="nav-item" v-if="$page.props.can.manage">
-                            <NavLink href="/users" :active="$page.component === 'User'">
+                            <NavLink href="/users" :active="$page.component === 'User' || $page.component === 'UserView'">
                                 <i class="bi bi-people"></i>&nbsp;User Management
                             </NavLink>
                         </li>

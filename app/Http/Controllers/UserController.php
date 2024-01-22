@@ -74,7 +74,15 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        $this->authorize('manage', \App\Models\User::class);
+        
+        return Inertia::render('UserView', [
+            'user' => UserRolesResource::make($user->load('roles')),
+            'roles' => fn () =>  \App\Models\Role::pluck('name', 'id'),
+            'approvers' => fn () => User::whereHas('roles', function (Builder $query) {
+                $query->whereIn('id', [1, 2]);
+            })->pluck('name', 'id')
+        ]);
     }
 
     /**

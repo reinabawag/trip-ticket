@@ -1,9 +1,8 @@
 <script setup>
 import Layout from '../Shared/Layout'
-import { Head } from '@inertiajs/vue3'
+import { Head, router, usePage } from '@inertiajs/vue3'
 import AddUser from '../Components/AddUser'
 import { ref, computed } from 'vue'
-import { usePage } from '@inertiajs/vue3'
 import RowUser from '../Components/RowUser.vue'
 
 const page = usePage()
@@ -18,6 +17,14 @@ const filteredData = computed(() => {
         .some(val => val.toLowerCase().includes(search.value.toLowerCase()))
     )
 })
+
+const userClicked = (user) => {
+    if (window.confirm(`Update the user ${user.name}`)) {
+        router.get(route('users.show', user.id))
+    }
+
+    return false;
+}
 </script>
 
 <template>
@@ -50,7 +57,7 @@ const filteredData = computed(() => {
                         </tr>
                     </thead>
                     <tbody>
-                        <RowUser v-for="user in filteredData" :key="user.id" :user="user" />
+                        <RowUser v-for="user in filteredData" :key="user.id" :user="user" @set-user="userClicked" />
                     </tbody>
                 </table>
             </div>
