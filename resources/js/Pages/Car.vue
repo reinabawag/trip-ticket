@@ -133,7 +133,7 @@ const decomCar = id => {
                             </td>
                             <td>
                                 {{ carx.model }}
-                                <input v-if="car.id && car.id == carx.id" class="form-control" v-model="car.make">
+                                <input v-if="car.id && car.id == carx.id" class="form-control" v-model="car.model">
                             </td>
                             <td>
                                 <span v-if="car.isDirty && carx.id == car.id" v-text="carx.status"></span>
