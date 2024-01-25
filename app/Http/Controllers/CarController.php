@@ -96,6 +96,8 @@ class CarController extends Controller
     {
         $car->status = $request->status;
         $car->plate_number = $request->plate_number;
+        $car->make = $request->make;
+        $car->model = $request->model;
 
         $car->save();
 
