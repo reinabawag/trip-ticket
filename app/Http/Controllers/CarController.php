@@ -95,6 +95,7 @@ class CarController extends Controller
     public function update(Request $request, Car $car)
     {
         $car->status = $request->status;
+        $car->plate_number = $request->plate_number;
 
         $car->save();
 

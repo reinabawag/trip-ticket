@@ -19,7 +19,10 @@ const form = useForm({
 
 const car = useForm({
     id: null,
-    status: null
+    status: null,
+    plate_number: null,
+    make: null,
+    model: null
 })
 
 const filteredData = computed(() => {
@@ -36,7 +39,10 @@ const changeStatus = (carx, event) => {
 const updateStatus = () => {
     car.patch(route('cars.update', car.id), {
         onSuccess: () => {
-            car.id = null
+            car.id = null,
+                car.plate_number = null,
+                car.make = null,
+                car.model = null
         }
     });
 }
@@ -117,13 +123,23 @@ const decomCar = id => {
                     </thead>
                     <tbody>
                         <tr v-for="carx in filteredData" :key="carx.id">
-                            <td>{{ carx.plate_number }}</td>
-                            <td>{{ carx.make }}</td>
-                            <td>{{ carx.model }}</td>
                             <td>
+                                {{ carx.plate_number }}
+                                <input v-if="car.id && car.id == carx.id" class="form-control" v-model="car.plate_number">
+                            </td>
+                            <td>
+                                {{ carx.make }}
+                                <input v-if="car.id && car.id == carx.id" class="form-control" v-model="car.make">
+                            </td>
+                            <td>
+                                {{ carx.model }}
+                                <input v-if="car.id && car.id == carx.id" class="form-control" v-model="car.make">
+                            </td>
+                            <td>
+                                <span v-if="car.isDirty && carx.id == car.id" v-text="carx.status"></span>
                                 <span v-if="!car.id" v-text="carx.status"></span>
                                 <select v-else-if="car.id && car.id == carx.id" class="form-select"
-                                    @change="changeStatus(carx, $event)" :value="carx.status">
+                                    @change="changeStatus(carx, $event)" v-model="car.status">
                                     <option>Active</option>
                                     <option>Maintenance</option>
                                     <option>Repair</option>
@@ -133,7 +149,8 @@ const decomCar = id => {
                             <td>
                                 <div class="d-flex justify-content-center" v-if="!car.id">
                                     <a class="btn btn-success btn-sm m-auto" href="#" role="button"
-                                        @click="car.id = carx.id"><i class="bi bi-pencil"></i>&nbsp;Edit</a>
+                                        @click="car.id = carx.id, car.plate_number = carx.plate_number, car.make = carx.make, car.model = carx.model, car.status = carx.status"><i
+                                            class="bi bi-pencil"></i>&nbsp;Edit</a>
                                     <a class="btn btn-danger btn-sm m-auto" href="#" role="button"
                                         @click.prevent="decomCar(carx.id)"><i class="bi bi-trash"></i>&nbsp;Decom</a>
                                 </div>
