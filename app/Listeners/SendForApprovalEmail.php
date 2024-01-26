@@ -29,9 +29,12 @@ class SendForApprovalEmail implements ShouldQueue
     public function handle(TripBooked $event)
     {
         if (isset($event->trip->user->approver->email)) {
-            Mail::to($event->trip->user->approver->email)
-                ->cc($event->trip->user->approver->cc->email)
-                ->send(new TripForApproval($event->trip));
+            $mail = Mail::to($event->trip->user->approver->email);
+
+            if (isset($event->trip->user->approver->cc->email))
+                $mail->cc($event->trip->user->approver->cc->email);
+            
+            $mail->send(new TripForApproval($event->trip));
         }
     }
 }
