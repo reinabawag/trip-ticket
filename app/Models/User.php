@@ -57,4 +57,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsTo(User::class);
     }
+
+    public function cc()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

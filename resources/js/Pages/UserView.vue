@@ -2,10 +2,12 @@
 import Layout from '../Shared/Layout'
 import { Head, usePage, useForm } from '@inertiajs/vue3'
 import { computed } from 'vue'
+import Car from './Car.vue';
 
 const page = usePage()
 
 const user = computed(() => page.props.user)
+const users = computed(() => page.props.users)
 const roles = computed(() => page.props.roles)
 const approvers = computed(() => page.props.approvers)
 
@@ -14,10 +16,16 @@ console.log(user.value.roles);
 const form = useForm({
     name: user.value.name,
     email: user.value.email,
-    password: '',
+    password: null,
     role: user.value.role,
-    approver: user.value.approver
+    approver: user.value.approver,
+    is_cc: false,
+    cc: user.value.cc_id,
 })
+
+const submit = () => {
+    form.patch(route('users.update', user.value.id));
+}
 </script>
 
 <template>
@@ -57,6 +65,18 @@ const form = useForm({
                         <select class="form-select" id="role" v-model="form.role" @change="change">
                             <option v-for="(role, index) in roles" :key="index" :value="index" v-text="role"></option>
                         </select>
+                    </div>
+                    <div class="mb-3 form-check form-switch" v-if="(form.role == 1 || form.role == 2)">
+                        <input class="form-check-input" type="checkbox" id="mySwitch" v-model="form.is_cc">
+                        <label class="form-check-label" for="mySwitch">Enable CC</label>
+                    </div>
+                    <div class="mb-3" v-if="form.is_cc">
+                        <label for="role" class="form-label fw-bolder">CC Approval to</label>
+                        <select class="form-select" :class="{ 'is-invalid': form.errors.cc }" id="cc" v-model="form.cc">
+                            <option selected>Please select user</option>
+                            <option v-for="(user, index) in users" :key="index" :value="user.id" v-text="user.name"></option>
+                        </select>
+                        <div class="invalid-feedback" v-text="form.errors.cc"></div>
                     </div>
                     <div class="mb-3" v-if="form.role == 3">
                         <label for="approver" class="form-label fw-bolder">Approver</label>
