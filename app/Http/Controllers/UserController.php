@@ -113,6 +113,8 @@ class UserController extends Controller
 
         if ($request->is_cc)
             $user->cc()->associate($cc);
+        else
+            $user->cc()->dissociate();
 
         $user->save();
 

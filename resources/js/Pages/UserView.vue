@@ -19,8 +19,8 @@ const form = useForm({
     password: null,
     role: user.value.role,
     approver: user.value.approver,
-    is_cc: false,
-    cc: user.value.cc_id,
+    is_cc: false || user.value.cc != null,
+    cc: user.value.cc,
 })
 
 const submit = () => {
