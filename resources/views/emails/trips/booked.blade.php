@@ -11,6 +11,11 @@ Confirmation of your Booking.
 </p>
 
 <p>
+    Plate number: {{ $trip->car->plate_number }}<br />
+    Make/Model: {{ $trip->car->make }}, {{ $trip->car->model }}
+</p>
+
+<p>
     Purpose: {{ $trip->purpose }}<br />
     Address: {{ $trip->address }}<br />
     Driver: {{ $trip->driver }}<br />

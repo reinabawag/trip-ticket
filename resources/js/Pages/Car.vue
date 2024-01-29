@@ -148,6 +148,9 @@ const decomCar = id => {
                             </td>
                             <td>
                                 <div class="d-flex justify-content-center" v-if="!car.id">
+                                    <a class="btn btn-primary btn-sm m-auto" href="#" role="button"
+                                        @click="car.id = carx.id, car.plate_number = carx.plate_number, car.make = carx.make, car.model = carx.model, car.status = carx.status"><i
+                                            class="bi bi-eye"></i>&nbsp;Image</a>
                                     <a class="btn btn-success btn-sm m-auto" href="#" role="button"
                                         @click="car.id = carx.id, car.plate_number = carx.plate_number, car.make = carx.make, car.model = carx.model, car.status = carx.status"><i
                                             class="bi bi-pencil"></i>&nbsp;Edit</a>
@@ -155,10 +158,10 @@ const decomCar = id => {
                                         @click.prevent="decomCar(carx.id)"><i class="bi bi-trash"></i>&nbsp;Decom</a>
                                 </div>
                                 <div class="d-flex justify-content-center" v-if="car.isDirty && car.id == carx.id">
-                                    <button type="submit" class="btn btn-success btn-sm m-auto"
+                                    <button type="submit" class="btn btn-success btn-sm m-1"
                                         :class="{ disabled: car.status == null }" @click="updateStatus"><i
                                             class="bi bi-database"></i>&nbsp;Update</button>
-                                    <button type="reset" class="btn btn-secondary btn-sm m-auto" @click="car.reset()"><i
+                                    <button type="reset" class="btn btn-secondary btn-sm m-1" @click="car.reset()"><i
                                             class="bi bi-arrow-counterclockwise"></i>&nbsp;Reset</button>
                                 </div>
                             </td>

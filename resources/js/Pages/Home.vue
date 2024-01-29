@@ -48,9 +48,12 @@ const calendarOptions = {
     headerToolbar: {
         left: 'prev,next today',
         center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
     },
-    events: '/api/books/events',
+    events: {
+        url: '/api/books/events',
+        lazyFetching: true,
+    },
     eventClick: function (info) {
         info.jsEvent.preventDefault();
 
