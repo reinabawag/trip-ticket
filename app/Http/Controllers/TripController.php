@@ -51,20 +51,15 @@ class TripController extends Controller
                 'date',
                 'after:today',
                 function ($attribute, $value, $fail) use ($request) {
-                    if ($trip = Trip::where(['car_id' => $request->car_id, $attribute => $value, 'is_active' => true])->first()) {
-                        $fail('Conflict with Booking ' . $trip->id . ' departure ' . date('g:i a', strtotime($trip->departure)) . ' and arrival of ' . date('g:i a', strtotime($trip->arrival)));
+                    if ($trip = Trip::where(['car_id' => $request->car_id, 'is_active' => true])->where('arrival', '>=', $value)->first()) {
+                        $fail('Conflict with Booking ' . "$trip->id  $attribute " . date('M d, Y g:i a', strtotime($trip->departure)) . ' and arrival of ' . date('M d, Y g:i a', strtotime($trip->arrival)));
                     }
                 }
             ],
             'arrival' => [
                 'required',
                 'date',
-                'after:departure',
-                function ($attribute, $value, $fail) use ($request) {
-                    if ($trip = Trip::where(['car_id' => $request->car_id, 'is_active' => true])->whereBetween('departure', [$request->departure, $request->arrival])->first()) {
-                        $fail('Conflict with Booking ' . $trip->id . ' departure ' . date('g:i a', strtotime($trip->departure)) . ' and arrival of ' . date('g:i a', strtotime($trip->arrival)));
-                    }
-                }
+                'after:departure'
             ],
             'car_id' => 'required|numeric',
             'passenger' => 'nullable|string'
