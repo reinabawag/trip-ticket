@@ -51,7 +51,9 @@ class TripController extends Controller
                 'date',
                 'after:today',
                 function ($attribute, $value, $fail) use ($request) {
-                    if ($trip = Trip::where(['car_id' => $request->car_id, 'is_active' => true])->whereBetween('arrival', [$value, $request->arrival])->orWhereBetween('departure', [$value, $request->arrival])->first()) {
+                    if ($trip = Trip::where(['car_id' => $request->car_id, 'is_active' => true])->where(function ($query) use ($request, $value) {
+                        $query->whereBetween('arrival', [$request->arrival, $request->arrival])->orWhereBetween('departure', [$value, $request->arrival]);
+                    })->first()) {
                         $fail('Conflict with Booking ' . "$trip->id  $attribute " . date('M d, Y g:i a', strtotime($trip->departure)) . ' and arrival of ' . date('M d, Y g:i a', strtotime($trip->arrival)));
                     }
                 }
@@ -149,7 +151,7 @@ class TripController extends Controller
 
             $trip->is_approved = true;
             $trip->save();
-            
+
             return redirect()->back()->with('message', 'Trip Approved!');
         } else {
             $trip->user->notify((new \App\Notifications\TripCanceled($trip))->afterCommit());
