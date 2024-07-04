@@ -82,7 +82,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         $query->withTrashed();
                         $query->where('plate_number', 'like', '%' . $request->search . '%');
                     });
-            })->paginate()),
+            })->latest()->paginate()),
         ]);
     })->name('profile');
 
