@@ -15,7 +15,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   __name: 'UpdatePassword',
-  props: ['token'],
+  props: {
+    token: String
+  },
   setup: function setup(__props, _ref) {
     var __expose = _ref.expose;
     __expose();

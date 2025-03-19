@@ -54,7 +54,7 @@
 <script setup>
 import { useForm, Head, Link } from '@inertiajs/vue3';
 
-const props = defineProps(['token']);
+const props = defineProps({ token: String })
 
 const form = useForm({
     email: null,

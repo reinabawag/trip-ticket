@@ -75,7 +75,7 @@ var _hoisted_4 = {
 var _hoisted_5 = /*#__PURE__*/_withScopeId(function () {
   return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "header-text mb-4"
-  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", null, "Hello, Again"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "We are happy to have you back.")], -1 /* HOISTED */);
+  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", null, "Login")], -1 /* HOISTED */);
 });
 var _hoisted_6 = {
   key: 0,
@@ -86,11 +86,11 @@ var _hoisted_7 = {
 };
 var _hoisted_8 = ["textContent"];
 var _hoisted_9 = {
-  "class": "input-group mb-1"
+  "class": "input-group mb-3"
 };
 var _hoisted_10 = ["textContent"];
 var _hoisted_11 = {
-  "class": "input-group mb-5 d-flex justify-content-between"
+  "class": "input-group mb-3 d-flex justify-content-between"
 };
 var _hoisted_12 = {
   "class": "form-check"
@@ -109,7 +109,9 @@ var _hoisted_15 = /*#__PURE__*/_withScopeId(function () {
     "class": "input-group mb-3"
   }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "btn btn-lg btn-primary w-100 fs-6"
-  }, "Login")], -1 /* HOISTED */);
+  }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "bi bi-person"
+  }), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Login")])], -1 /* HOISTED */);
 });
 var _hoisted_16 = {
   "class": "input-group mb-3"

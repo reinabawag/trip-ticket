@@ -32,7 +32,7 @@
                     </div>
                     <div class="input-group mb-3">
                         <!-- <a class="btn btn-lg btn-light w-100 fs-6" href="/" role="button"><i class="bi bi-house"></i>&nbsp;<small>Back to Home</small></a> -->
-                        <Link class="btn btn-lg btn-light w-100 fs-6" href="/" role="button"><i class="bi bi-person"></i>&nbsp;<small>Login</small></Link>
+                        <Link class="btn btn-lg btn-light w-100 fs-6" href="/login" role="button"><i class="bi bi-person"></i>&nbsp;<small>Login</small></Link>
                     </div>
                 </form>
           </div>
