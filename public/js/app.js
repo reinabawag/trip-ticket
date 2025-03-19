@@ -182,6 +182,16 @@ var map = {
 		"/js/vendor",
 		"resources_js_Pages_Profile_vue"
 	],
+	"./Reset": [
+		"./resources/js/Pages/Reset.vue",
+		"/js/vendor",
+		"resources_js_Pages_Reset_vue"
+	],
+	"./Reset.vue": [
+		"./resources/js/Pages/Reset.vue",
+		"/js/vendor",
+		"resources_js_Pages_Reset_vue"
+	],
 	"./Scan": [
 		"./resources/js/Pages/Scan.vue",
 		"/js/vendor",
@@ -201,6 +211,16 @@ var map = {
 		"./resources/js/Pages/ShowBook.vue",
 		"/js/vendor",
 		"resources_js_Pages_ShowBook_vue"
+	],
+	"./UpdatePassword": [
+		"./resources/js/Pages/UpdatePassword.vue",
+		"/js/vendor",
+		"resources_js_Pages_UpdatePassword_vue"
+	],
+	"./UpdatePassword.vue": [
+		"./resources/js/Pages/UpdatePassword.vue",
+		"/js/vendor",
+		"resources_js_Pages_UpdatePassword_vue"
 	],
 	"./User": [
 		"./resources/js/Pages/User.vue",

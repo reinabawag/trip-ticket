@@ -1,5 +1,5 @@
 <template>
-    <Head title="Login" />        
+    <Head title="Password Reset" />        
     <!----------------------- Main Container -------------------------->
      <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <!----------------------- Login Container -------------------------->
@@ -17,35 +17,22 @@
        <div class="right-box">
           <div class="row align-items-center">
                 <div class="header-text mb-4">
-                     <h2>Hello, Again</h2>
-                     <p>We are happy to have you back.</p>
+                     <h2>Forgot your password?</h2>
                 </div>
-                <form @submit.prevent="form.post('/login')">
-                    <p class="text-success" v-if="$page.props.flash.status">{{ $page.props.flash.status }}</p>
+                <form @submit.prevent="form.post('/forgot-password')">
                     <div class="input-group mb-3">
                         <input type="text" class="form-control form-control-lg bg-light fs-6" :class="{ 'is-invalid': form.errors.email }" v-model="form.email" placeholder="Email address">
                         <div class="invalid-feedback" v-text="form.errors.email"></div>
                     </div>
-                    <div class="input-group mb-1">
-                        <input type="password" class="form-control form-control-lg bg-light fs-6" :class="{ 'is-invalid': form.errors.password }" v-model="form.password" placeholder="Password">
-                        <div class="invalid-feedback" v-text="form.errors.password"></div>
-                    </div>
-                    <div class="input-group mb-5 d-flex justify-content-between">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" v-model="form.remember" id="formCheck">
-                            <label for="formCheck" class="form-check-label text-secondary"><small>Remember Me</small></label>
-                        </div>
-                        <div class="forgot">
-                            <small><Link href="/forgot-password">Forgot password?</Link></small>
-                        </div>
-                    </div>
+
+                    <p class="text-success" v-if="$page.props.flash.status">{{ $page.props.flash.status }}</p>
 
                     <div class="input-group mb-3">
-                        <button class="btn btn-lg btn-primary w-100 fs-6">Login</button>
+                        <button class="btn btn-lg btn-primary w-100 fs-6"><i class="bi bi-send"></i>&nbsp;Send Link</button>
                     </div>
                     <div class="input-group mb-3">
                         <!-- <a class="btn btn-lg btn-light w-100 fs-6" href="/" role="button"><i class="bi bi-house"></i>&nbsp;<small>Back to Home</small></a> -->
-                        <Link class="btn btn-lg btn-light w-100 fs-6" href="/" role="button"><i class="bi bi-house"></i>&nbsp;<small>Back to Home</small></Link>
+                        <Link class="btn btn-lg btn-light w-100 fs-6" href="/" role="button"><i class="bi bi-person"></i>&nbsp;<small>Login</small></Link>
                     </div>
                 </form>
           </div>
@@ -59,8 +46,6 @@ import { useForm, Head, Link } from '@inertiajs/vue3';
 
 const form = useForm({
     email: null,
-    password: null,
-    remember: true
 });
 </script>
 

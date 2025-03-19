@@ -8,7 +8,9 @@ use App\Http\Controllers\CarController;
 use App\Http\Controllers\TripController;
 use App\Http\Resources\TripCarCollection;
 use App\Models\User;
+use Illuminate\Contracts\Queue\Queue;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Password;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,16 +48,62 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/login', function () {
-    if (Auth::check()) {
-        return redirect()->route('home');
-    }
+    // if (Auth::check()) {
+    //     return redirect()->route('home');
+    // }
 
     return Inertia::render('Login');
-})->name('login');
+})->middleware('guest')->name('login');
 
 Route::post('/logout', [\App\Http\Controllers\LoginController::class, 'logout'])->middleware('auth');
 
 Route::post('/login', [\App\Http\Controllers\LoginController::class, 'authenticate']);
+
+// Add forgot password function
+Route::get('/forgot-password', function () {
+    return Inertia::render('Reset');
+})->middleware('guest')->name('password.request');
+
+Route::post('/forgot-password', function(Request $request) {
+    $request->validate(['email' => 'required|email']);
+
+    $status = Password::sendResetLink(
+        $request->only('email')
+    );
+
+    return $status === Password::RESET_LINK_SENT
+                ? back()->with(['status' => __($status)])
+                : back()->withErrors(['email' => __($status)]);
+})->middleware('guest')->name('password.email');
+
+Route::get('/reset-password/{token}', function ($token) {
+    return Inertia::render('UpdatePassword', ['token' => $token]);
+})->middleware('guest')->name('password.reset');
+
+Route::post('/reset-password', function (Request $request) {
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|min:8|confirmed',
+    ]);
+ 
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function ($user, $password) {
+            $user->forceFill([
+                'password' => Illuminate\Support\Facades\Hash::make($password)
+            ])->setRememberToken(Illuminate\Support\Str::random(60));
+ 
+            $user->save();
+ 
+            event(new Illuminate\Auth\Events\PasswordReset($user));
+        }
+    );
+ 
+    return $status === Password::PASSWORD_RESET
+                ? redirect()->route('login')->with('status', __($status))
+                : back()->withErrors(['email' => [__($status)]]);
+})->middleware('guest')->name('password.update');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::controller(App\Http\Controllers\TripController::class)->group(function () {
