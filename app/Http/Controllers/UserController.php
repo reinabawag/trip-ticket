@@ -117,7 +117,9 @@ class UserController extends Controller
         else
             $user->cc()->dissociate();
 
-        $user->save();
+        $user->approver()->associate($request->approver)->save();
+
+        // $user->save();
 
         $user->roles()->sync($request->only('role'));
 
