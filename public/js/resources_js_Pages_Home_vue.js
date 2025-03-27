@@ -14,13 +14,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 /* harmony import */ var _Shared_Layout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Shared/Layout */ "./resources/js/Shared/Layout.vue");
 /* harmony import */ var _inertiajs_vue3__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inertiajs/vue3 */ "./node_modules/@inertiajs/vue3/dist/index.esm.js");
-/* harmony import */ var _fullcalendar_vue3__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @fullcalendar/vue3 */ "./node_modules/@fullcalendar/vue3/dist/index.js");
+/* harmony import */ var _fullcalendar_vue3__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @fullcalendar/vue3 */ "./node_modules/@fullcalendar/vue3/dist/index.js");
 /* harmony import */ var _fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @fullcalendar/daygrid */ "./node_modules/@fullcalendar/daygrid/index.js");
 /* harmony import */ var _fullcalendar_interaction__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @fullcalendar/interaction */ "./node_modules/@fullcalendar/interaction/index.js");
 /* harmony import */ var _fullcalendar_bootstrap5__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @fullcalendar/bootstrap5 */ "./node_modules/@fullcalendar/bootstrap5/index.js");
 /* harmony import */ var _fullcalendar_timegrid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @fullcalendar/timegrid */ "./node_modules/@fullcalendar/timegrid/index.js");
 /* harmony import */ var _fullcalendar_list__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @fullcalendar/list */ "./node_modules/@fullcalendar/list/index.js");
 /* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
+/* harmony import */ var _fullcalendar_core__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @fullcalendar/core */ "./node_modules/@fullcalendar/core/index.js");
+
 
 
 
@@ -53,8 +55,24 @@ __webpack_require__.r(__webpack_exports__);
         info.jsEvent.preventDefault();
         trip.value.title = info.event.title;
         trip.value.user = info.event.extendedProps.user;
-        trip.value.start = info.event.start;
-        trip.value.end = info.event.end;
+        trip.value.start = (0,_fullcalendar_core__WEBPACK_IMPORTED_MODULE_9__.formatDate)(info.event.start, {
+          year: 'numeric',
+          month: 'long',
+          day: '2-digit',
+          weekday: 'long',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: 'true'
+        });
+        trip.value.end = (0,_fullcalendar_core__WEBPACK_IMPORTED_MODULE_9__.formatDate)(info.event.end, {
+          year: 'numeric',
+          month: 'long',
+          day: '2-digit',
+          weekday: 'long',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: 'true'
+        });
         trip.value.driver = info.event.extendedProps.driver;
         trip.value.passenger = info.event.extendedProps.passenger;
         modal.value.show();
@@ -93,7 +111,7 @@ __webpack_require__.r(__webpack_exports__);
         return _inertiajs_vue3__WEBPACK_IMPORTED_MODULE_2__.Head;
       },
       get FullCalendar() {
-        return _fullcalendar_vue3__WEBPACK_IMPORTED_MODULE_9__["default"];
+        return _fullcalendar_vue3__WEBPACK_IMPORTED_MODULE_10__["default"];
       },
       get dayGridPlugin() {
         return _fullcalendar_daygrid__WEBPACK_IMPORTED_MODULE_4__["default"];
@@ -115,6 +133,9 @@ __webpack_require__.r(__webpack_exports__);
       },
       get Tooltip() {
         return bootstrap__WEBPACK_IMPORTED_MODULE_3__.Tooltip;
+      },
+      get formatDate() {
+        return _fullcalendar_core__WEBPACK_IMPORTED_MODULE_9__.formatDate;
       }
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
@@ -254,7 +275,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var _hoisted_1 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", null, "Home", -1 /* HOISTED */);
 var _hoisted_2 = {
-  "class": "modal",
+  "class": "modal fade",
   tabindex: "-1"
 };
 var _hoisted_3 = {
