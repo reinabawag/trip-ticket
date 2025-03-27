@@ -10,8 +10,8 @@ class Trip extends Model
     use HasFactory;
 
     protected $casts = [
-        // 'departure' => 'datetime:Y-m-d H:i:s',
-        // 'arrival' => 'datetime:Y-m-d H:i:s',
+        'departure' => 'datetime',
+        'arrival' => 'datetime',
         'is_approved' => 'boolean',
         'is_active' => 'boolean',
     ];
