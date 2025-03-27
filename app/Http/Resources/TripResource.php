@@ -23,6 +23,7 @@ class TripResource extends JsonResource
             'url' => route('api.trips.show', $this->id),
             'driver' => $this->driver,
             'passenger' => $this->passenger,
+            'backgroundColor' => $this->when($this->is_approved, '#2E8B57'),
         ];
     }
 }

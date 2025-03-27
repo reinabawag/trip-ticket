@@ -51,13 +51,6 @@ class TripController extends Controller
                 'required',
                 'date',
                 'after:today',
-                // function ($attribute, $value, $fail) use ($request) {
-                //     if ($trip = Trip::where(['car_id' => $request->car_id, 'is_active' => true])->where(function ($query) use ($request, $value) {
-                //         $query->whereBetween('arrival', [$request->arrival, $request->arrival])->orWhereBetween('departure', [$value, $request->arrival]);
-                //     })->first()) {
-                //         $fail('Conflict with Booking ' . "$trip->id  $attribute " . date('M d, Y g:i a', strtotime($trip->departure)) . ' and arrival of ' . date('M d, Y g:i a', strtotime($trip->arrival)));
-                //     }
-                // },
                 new NoOverlappingTrips
             ],
             'arrival' => [
