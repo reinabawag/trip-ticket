@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Models\Car;
 use App\Http\Resources\TripCollection;
 use App\Http\Resources\CarResource;
+use App\Rules\NoOverlappingTrips;
 use Illuminate\Support\Facades\Auth;
 
 class TripController extends Controller
@@ -50,13 +51,14 @@ class TripController extends Controller
                 'required',
                 'date',
                 'after:today',
-                function ($attribute, $value, $fail) use ($request) {
-                    if ($trip = Trip::where(['car_id' => $request->car_id, 'is_active' => true])->where(function ($query) use ($request, $value) {
-                        $query->whereBetween('arrival', [$request->arrival, $request->arrival])->orWhereBetween('departure', [$value, $request->arrival]);
-                    })->first()) {
-                        $fail('Conflict with Booking ' . "$trip->id  $attribute " . date('M d, Y g:i a', strtotime($trip->departure)) . ' and arrival of ' . date('M d, Y g:i a', strtotime($trip->arrival)));
-                    }
-                }
+                // function ($attribute, $value, $fail) use ($request) {
+                //     if ($trip = Trip::where(['car_id' => $request->car_id, 'is_active' => true])->where(function ($query) use ($request, $value) {
+                //         $query->whereBetween('arrival', [$request->arrival, $request->arrival])->orWhereBetween('departure', [$value, $request->arrival]);
+                //     })->first()) {
+                //         $fail('Conflict with Booking ' . "$trip->id  $attribute " . date('M d, Y g:i a', strtotime($trip->departure)) . ' and arrival of ' . date('M d, Y g:i a', strtotime($trip->arrival)));
+                //     }
+                // },
+                new NoOverlappingTrips
             ],
             'arrival' => [
                 'required',
