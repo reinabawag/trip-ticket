@@ -135,7 +135,8 @@ class TripController extends Controller
     {
         return new TripCollection(Trip::with(['car' => fn ($query) => $query->withTrashed()])
             ->where('is_active', true)
-            ->whereBetween('departure', [$request->start, $request->end])
+            ->whereBetween('arrival', [$request->start, $request->end])
+            ->OrWhereBetween('departure', [$request->start, $request->end])
             ->get());
     }
 
