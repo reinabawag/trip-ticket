@@ -16,6 +16,7 @@ class Car extends Model
         'model',
         'status',
         'photo',
+        'transmission'
     ];
 
     public function trips()

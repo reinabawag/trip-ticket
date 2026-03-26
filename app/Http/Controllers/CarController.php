@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Car;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Http\Resources\CarResource;
 
 class CarController extends Controller
 {
@@ -19,6 +20,7 @@ class CarController extends Controller
 
         return Inertia::render('Car', [
             'cars' => Car::all(),
+            // 'cars' => CarResource::collection(Car::all()),
         ]);
     }
 
@@ -45,6 +47,7 @@ class CarController extends Controller
             'make' => 'required',
             'model' => 'required',
             'status' => 'required',
+            'transmission' => 'required',
             'photo' => 'mimes:jpg,png',
         ]);
 
@@ -56,6 +59,7 @@ class CarController extends Controller
                 'make' => $request->make,
                 'model' => $request->model,
                 'status' => $request->status,
+                'transmission' => $request->transmission,
                 'photo' => $request->file('photo')->hashName(),
             ]);
         }
@@ -98,6 +102,7 @@ class CarController extends Controller
         $car->plate_number = $request->plate_number;
         $car->make = $request->make;
         $car->model = $request->model;
+        $car->transmission = $request->transmission;
 
         $car->save();
 

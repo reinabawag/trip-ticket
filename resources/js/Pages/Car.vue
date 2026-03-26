@@ -14,6 +14,7 @@ const form = useForm({
     plate_number: null,
     make: null,
     model: null,
+    transmission: 0,
     status: 'Active',
 })
 
@@ -22,7 +23,8 @@ const car = useForm({
     status: null,
     plate_number: null,
     make: null,
-    model: null
+    transmission: 1,
+    model: null,
 })
 
 const filteredData = computed(() => {
@@ -42,6 +44,7 @@ const updateStatus = () => {
             car.id = null,
                 car.plate_number = null,
                 car.make = null,
+                car.transmission = 0,
                 car.model = null
         }
     });
@@ -90,6 +93,14 @@ const decomCar = id => {
                         <div v-if="form.errors.model" v-text="form.errors.model" class="invalid-feedback"></div>
                     </div>
                     <div class="mb-3">
+                        <label for="transmission" class="form-label fw-bolder">Transmission</label>
+                        <select id="transmission" v-model="form.transmission" class="form-select">
+                            <option value="0">Manual</option>
+                            <option value="1">Automatic</option>
+                        </select>
+                        <div v-if="form.errors.transmission" v-text="form.errors.transmission" class="invalid-feedback"></div>
+                    </div>
+                    <div class="mb-3">
                         <label for="image" class="form-label fw-bolder">Image</label>
                         <input type="file" @input="form.photo = $event.target.files[0]" class="form-control" id="image"
                             :class="{ 'is-invalid': form.errors.photo }">
@@ -117,6 +128,7 @@ const decomCar = id => {
                             <th scope="col">Plate Number</th>
                             <th scope="col">Make</th>
                             <th scope="col">Model</th>
+                            <th scope="col">Transmission</th>
                             <th scope="col">Status</th>
                             <th scope="col">Options</th>
                         </tr>
@@ -136,6 +148,13 @@ const decomCar = id => {
                                 <input v-if="car.id && car.id == carx.id" class="form-control" v-model="car.model">
                             </td>
                             <td>
+                                {{ carx.transmission == 0 ? "Manual" : "Automatic" }}
+                                <select v-if="car.id && car.id == carx.id" class="form-select" v-model="car.transmission">
+                                    <option value="0">Manual</option>
+                                    <option value="1">Automatic</option>
+                                </select>
+                            </td>
+                            <td>
                                 <span v-if="car.isDirty && carx.id == car.id" v-text="carx.status"></span>
                                 <span v-if="!car.id" v-text="carx.status"></span>
                                 <select v-else-if="car.id && car.id == carx.id" class="form-select"
@@ -148,11 +167,11 @@ const decomCar = id => {
                             </td>
                             <td>
                                 <div class="d-flex justify-content-center" v-if="!car.id">
-                                    <a class="btn btn-primary btn-sm m-auto" href="#" role="button"
-                                        @click="car.id = carx.id, car.plate_number = carx.plate_number, car.make = carx.make, car.model = carx.model, car.status = carx.status"><i
-                                            class="bi bi-eye"></i>&nbsp;Image</a>
+                                    <a class="btn btn-primary btn-sm m-auto" href="#" role="button">
+                                        <i class="bi bi-eye"></i>&nbsp;Image
+                                    </a>
                                     <a class="btn btn-success btn-sm m-auto" href="#" role="button"
-                                        @click="car.id = carx.id, car.plate_number = carx.plate_number, car.make = carx.make, car.model = carx.model, car.status = carx.status"><i
+                                        @click="car.id = carx.id, car.plate_number = carx.plate_number, car.make = carx.make, car.model = carx.model, car.transmission = carx.transmission, car.status = carx.status"><i
                                             class="bi bi-pencil"></i>&nbsp;Edit</a>
                                     <a class="btn btn-danger btn-sm m-auto" href="#" role="button"
                                         @click.prevent="decomCar(carx.id)"><i class="bi bi-trash"></i>&nbsp;Decom</a>
