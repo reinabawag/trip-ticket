@@ -157,14 +157,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
                             $query->where('name', 'like', '%' . $request->search . '%');
                         });
                 })
-                ->whereHas('user', function ($query) use ($request) {
-                    $query->when($request->user()->can('approve') && $request->user()->cannot('manage'), function ($query) {
-                        $query->whereBelongsTo(Auth::user(), 'approver');
+                ->where(function ($query) use ($request) {
+                    $query->whereHas('user', function ($query) use ($request) {
+                        $query->when($request->user()->can('approve') && $request->user()->cannot('manage'), function ($query) {
+                            $query->whereBelongsTo(Auth::user(), 'approver');
+                        });
+                    })
+                    ->orWhereHas('car', function ($query) use ($request) {                            
+                        $query->where('user_id', Auth::user()->id);
                     });
-                })
-                ->orWhereHas('car', function ($query) use ($request) {                            
-                    $query->where('user_id', Auth::user()->id);
-                })                
+                })                                
                 ->with(['user', 'car' => fn ($query) => $query->withTrashed()])
                 ->latest()
                 ->paginate()
