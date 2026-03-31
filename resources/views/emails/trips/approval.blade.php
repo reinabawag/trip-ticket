@@ -1,7 +1,7 @@
 @component('mail::message')
 # Booking Number {{ $trip->id }}
 
-Hi Ma'am/Sir {{ $trip->user->approver->name }},
+Hi Ma'am/Sir {{ $trip->car->user->id ? $trip->car->user->name : $trip->user->approver->name }},
 
 For your approval!
 

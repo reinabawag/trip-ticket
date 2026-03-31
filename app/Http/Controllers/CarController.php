@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Car;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Http\Resources\CarResource;
 
 class CarController extends Controller
 {
@@ -19,8 +20,10 @@ class CarController extends Controller
         $this->authorize('manage', \App\Models\User::class);
 
         return Inertia::render('Car', [
-            'cars' => Car::all(),
-            // 'cars' => CarResource::collection(Car::all()),
+            'cars' => Car::with('user')->get(),
+            'approvers' => fn () => User::whereHas('roles', function (Builder $query) {
+                $query->whereIn('id', [1, 2]);
+            })->pluck('name', 'id')
         ]);
     }
 
@@ -47,7 +50,8 @@ class CarController extends Controller
             'make' => 'required',
             'model' => 'required',
             'status' => 'required',
-            'transmission' => 'required',
+            'user_id' => 'nullable|integer',
+            'transmission' => 'required|integer',
             'photo' => 'mimes:jpg,png',
         ]);
 
@@ -59,6 +63,7 @@ class CarController extends Controller
                 'make' => $request->make,
                 'model' => $request->model,
                 'status' => $request->status,
+                'user_id' => $request->user_id,
                 'transmission' => $request->transmission,
                 'photo' => $request->file('photo')->hashName(),
             ]);
@@ -102,6 +107,7 @@ class CarController extends Controller
         $car->plate_number = $request->plate_number;
         $car->make = $request->make;
         $car->model = $request->model;
+        $car->user_id = $request->user_id;
         $car->transmission = $request->transmission;
 
         $car->save();

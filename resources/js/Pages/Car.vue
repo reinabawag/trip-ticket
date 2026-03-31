@@ -4,7 +4,8 @@ import { Head, router, useForm } from '@inertiajs/vue3'
 import Layout from '../Shared/Layout.vue'
 
 const props = defineProps({
-    cars: Array
+    cars: Array,
+    approvers: Array,
 })
 
 const search = ref('')
@@ -14,6 +15,7 @@ const form = useForm({
     plate_number: null,
     make: null,
     model: null,
+    user_id: null,
     transmission: 0,
     status: 'Active',
 })
@@ -23,7 +25,8 @@ const car = useForm({
     status: null,
     plate_number: null,
     make: null,
-    transmission: 1,
+    user_id: null,
+    transmission: null,
     model: null,
 })
 
@@ -44,8 +47,9 @@ const updateStatus = () => {
             car.id = null,
                 car.plate_number = null,
                 car.make = null,
-                car.transmission = 0,
                 car.model = null
+                car.transmission = 0,
+                car.user_id = null
         }
     });
 }
@@ -101,6 +105,15 @@ const decomCar = id => {
                         <div v-if="form.errors.transmission" v-text="form.errors.transmission" class="invalid-feedback"></div>
                     </div>
                     <div class="mb-3">
+                        <label for="user_id" class="form-label fw-bolder">Special Approver</label>
+                        <select id="user_id" v-model="form.user_id" class="form-select" :class="{ 'is-invalid': form.errors.user_id }">
+                            <option :value="null">None</option>
+                            <option v-for="(approver, index) in approvers" :key="index" :value="index" v-text="approver">
+                            </option>
+                        </select>
+                        <div v-if="form.errors.transmission" v-text="form.errors.transmission" class="invalid-feedback"></div>
+                    </div>
+                    <div class="mb-3">
                         <label for="image" class="form-label fw-bolder">Image</label>
                         <input type="file" @input="form.photo = $event.target.files[0]" class="form-control" id="image"
                             :class="{ 'is-invalid': form.errors.photo }">
@@ -129,6 +142,7 @@ const decomCar = id => {
                             <th scope="col">Make</th>
                             <th scope="col">Model</th>
                             <th scope="col">Transmission</th>
+                            <th scope="col">Special Approver</th>
                             <th scope="col">Status</th>
                             <th scope="col">Options</th>
                         </tr>
@@ -155,6 +169,13 @@ const decomCar = id => {
                                 </select>
                             </td>
                             <td>
+                                {{ carx.user != null ? carx.user.name : 'None'}}
+                                <select v-if="car.id && car.id == carx.id" class="form-select" v-model="car.user_id">
+                                    <option :value="null">None</option>
+                                    <option v-for="(approver, index) in approvers" :key="index" :value="index" v-text="approver"></option>
+                                </select>
+                            </td>
+                            <td>
                                 <span v-if="car.isDirty && carx.id == car.id" v-text="carx.status"></span>
                                 <span v-if="!car.id" v-text="carx.status"></span>
                                 <select v-else-if="car.id && car.id == carx.id" class="form-select"
@@ -168,20 +189,22 @@ const decomCar = id => {
                             <td>
                                 <div class="d-flex justify-content-center" v-if="!car.id">
                                     <a class="btn btn-primary btn-sm m-auto" href="#" role="button">
-                                        <i class="bi bi-eye"></i>&nbsp;Image
+                                        <i class="bi bi-eye"></i>
                                     </a>
                                     <a class="btn btn-success btn-sm m-auto" href="#" role="button"
-                                        @click="car.id = carx.id, car.plate_number = carx.plate_number, car.make = carx.make, car.model = carx.model, car.transmission = carx.transmission, car.status = carx.status"><i
-                                            class="bi bi-pencil"></i>&nbsp;Edit</a>
+                                        @click="car.id = carx.id, car.plate_number = carx.plate_number, car.make = carx.make, car.model = carx.model, car.transmission = carx.transmission, car.user_id = carx.user_id, car.status = carx.status"><i
+                                            class="bi bi-pencil"></i>
+                                        </a>
                                     <a class="btn btn-danger btn-sm m-auto" href="#" role="button"
-                                        @click.prevent="decomCar(carx.id)"><i class="bi bi-trash"></i>&nbsp;Decom</a>
+                                        @click.prevent="decomCar(carx.id)"><i class="bi bi-trash"></i>
+                                    </a>
                                 </div>
                                 <div class="d-flex justify-content-center" v-if="car.isDirty && car.id == carx.id">
                                     <button type="submit" class="btn btn-success btn-sm m-1"
                                         :class="{ disabled: car.status == null }" @click="updateStatus"><i
-                                            class="bi bi-database"></i>&nbsp;Update</button>
+                                            class="bi bi-database"></i></button>
                                     <button type="reset" class="btn btn-secondary btn-sm m-1" @click="car.reset()"><i
-                                            class="bi bi-arrow-counterclockwise"></i>&nbsp;Reset</button>
+                                            class="bi bi-arrow-counterclockwise"></i></button>
                                 </div>
                             </td>
                         </tr>

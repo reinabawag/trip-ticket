@@ -63,4 +63,9 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     {
         return $this->belongsTo(User::class);
     }
+
+    public function car()
+    {
+        return $this->hasOne(Car::class);
+    }
 }

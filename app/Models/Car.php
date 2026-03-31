@@ -16,11 +16,17 @@ class Car extends Model
         'model',
         'status',
         'photo',
-        'transmission'
+        'transmission',
+        'user_id'
     ];
 
     public function trips()
     {
         return $this->hasMany(Trip::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
