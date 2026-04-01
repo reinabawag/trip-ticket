@@ -20,6 +20,7 @@ class CarResource extends JsonResource
             'make' => $this->make,
             'model' => $this->model,
             'transmission' => $this->transmission == 0 ? 'Manual' : 'Automatic',
+            'user_id' => $this->user_id,
             'image' => ! is_null($this->photo) ? asset("storage/$this->photo") : 'https://picsum.photos/200/',
             'status' => $this->status
         ];

@@ -26,6 +26,12 @@ __webpack_require__.r(__webpack_exports__);
     var __expose = _ref.expose;
     __expose();
     var page = (0,_inertiajs_vue3__WEBPACK_IMPORTED_MODULE_2__.usePage)();
+    var user = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(function () {
+      return page.props.auth.user;
+    });
+    var computedCan = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(function () {
+      return page.props.can;
+    });
     var search = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(page.props.search);
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(search, _.debounce(function () {
       console.log(route().params);
@@ -44,12 +50,26 @@ __webpack_require__.r(__webpack_exports__);
         preserveScroll: true
       });
     };
+    var disableIf = function disableIf(carUserId) {
+      console.log('CarUserID', carUserId == user.value.id);
+      console.log('CanComputed', computedCan.value.manage);
+      if (computedCan.value.manage) {
+        return false;
+      }
+      if (carUserId != user.value.id) {
+        return true;
+      }
+    };
     var __returned__ = {
       page: page,
+      user: user,
+      computedCan: computedCan,
       search: search,
       approveTrip: approveTrip,
+      disableIf: disableIf,
       ref: vue__WEBPACK_IMPORTED_MODULE_0__.ref,
       watch: vue__WEBPACK_IMPORTED_MODULE_0__.watch,
+      computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed,
       get Layout() {
         return _Shared_Layout__WEBPACK_IMPORTED_MODULE_1__["default"];
       },
@@ -238,7 +258,7 @@ var _hoisted_5 = /*#__PURE__*/_withScopeId(function () {
 var _hoisted_6 = ["id"];
 var _hoisted_7 = {
   key: 0,
-  "class": "btn-group"
+  "class": "btn-group d-flex w-100"
 };
 var _hoisted_8 = ["onClick"];
 var _hoisted_9 = /*#__PURE__*/_withScopeId(function () {
@@ -288,17 +308,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           id: approval.id
         }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(approval.name), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(approval.car.plate_number), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(approval.purpose), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(approval.departure), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(approval.arrival), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(approval.driver), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(approval.passenger), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [approval.is_active && approval.is_approved == false ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
           type: "button",
-          "class": "btn btn-sm btn-success",
+          "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([{
+            disabled: $setup.disableIf(approval.car.user_id)
+          }, "btn btn-sm btn-success flex-fill"]),
           onClick: function onClick($event) {
             return $setup.approveTrip(approval.id, true);
           }
-        }, [_hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Approve")], 8 /* PROPS */, _hoisted_8), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+        }, [_hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Approve")], 10 /* CLASS, PROPS */, _hoisted_8), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
           type: "button",
-          "class": "btn btn-sm btn-danger",
+          "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([{
+            disabled: $setup.disableIf(approval.car.user_id)
+          }, "btn btn-sm btn-danger flex-fill"]),
           onClick: function onClick($event) {
             return $setup.approveTrip(approval.id, false);
           }
-        }, [_hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Reject")], 8 /* PROPS */, _hoisted_10)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+        }, [_hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Reject")], 10 /* CLASS, PROPS */, _hoisted_10)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
           type: "button",
           "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["btn btn-sm disabled btn-block", approval.is_approved ? 'btn-success' : 'btn-warning'])
         }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {

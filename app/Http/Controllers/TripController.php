@@ -76,6 +76,8 @@ class TripController extends Controller
             ))
         );
 
+        // dd([$trip->user->approver->email, $trip->car->user()->exists()]);
+
         \App\Events\TripBooked::dispatch($trip);
 
         return redirect('/book')->with('status', true);

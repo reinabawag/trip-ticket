@@ -1,13 +1,17 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import Layout from '../Shared/Layout';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 
 defineProps({
-    approvals: Object
+    approvals: Object,
 })
 
 const page = usePage();
+
+const user = computed(() => page.props.auth.user);
+
+const computedCan = computed(() => page.props.can)
 
 const search = ref(page.props.search);
 
@@ -22,6 +26,21 @@ watch(search, _.debounce(() => {
 const approveTrip = (id, status) => {
     router.put(route('trips.approval', id), { status: status }, { preserveScroll: true })
 } 
+
+const disableIf = (carUserId) => {
+
+    console.log('CarUserID', carUserId == user.value.id);
+    console.log('CanComputed', computedCan.value.manage);
+
+
+    if (computedCan.value.manage) {
+        return false
+    }
+
+    if (carUserId != user.value.id) {
+        return true
+    }
+}
 </script>
 
 <template>
@@ -62,10 +81,10 @@ const approveTrip = (id, status) => {
                     <td>{{ approval.driver }}</td>
                     <td>{{ approval.passenger }}</td>
                     <td>
-                        <div class="btn-group" v-if="approval.is_active && approval.is_approved == false">
-                            <button type="button" class="btn btn-sm btn-success" @click="approveTrip(approval.id, true)"><i
+                        <div class="btn-group d-flex w-100" v-if="approval.is_active && approval.is_approved == false">
+                            <button type="button" :class="{disabled: disableIf(approval.car.user_id) }" class="btn btn-sm btn-success flex-fill" @click="approveTrip(approval.id, true)"><i
                                     class="bi bi-check-circle"></i> Approve</button>
-                            <button type="button" class="btn btn-sm btn-danger" @click="approveTrip(approval.id, false)"><i
+                            <button type="button" :class="{disabled: disableIf(approval.car.user_id) }" class="btn btn-sm btn-danger flex-fill" @click="approveTrip(approval.id, false)"><i
                                     class="bi bi-x-circle"></i> Reject</button>
                         </div>
                         <div class="d-grid gap-2" v-else>

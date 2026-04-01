@@ -151,20 +151,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         ->orWhere('driver', 'like', '%' . $request->search . '%')
                         ->orWhereHas('car', function ($query) use ($request) {
                             $query->withTrashed();
-                            $query->where('plate_number', 'like', '%' . $request->search . '%');
+                            $query->where('plate_number', 'like', '%' . $request->search . '%');                            
                         })
                         ->orWhereHas('user', function ($query) use ($request) {
                             $query->where('name', 'like', '%' . $request->search . '%');
                         });
                 })
                 ->where(function ($query) use ($request) {
-                    $query->whereHas('user', function ($query) use ($request) {
+                    $query
+                    ->whereHas('user', function ($query) use ($request) {
                         $query->when($request->user()->can('approve') && $request->user()->cannot('manage'), function ($query) {
-                            $query->whereBelongsTo(Auth::user(), 'approver');
+                            $query->whereBelongsTo(Auth::user(), 'approver');                            
                         });
                     })
                     ->orWhereHas('car', function ($query) use ($request) {                            
-                        $query->where('user_id', Auth::user()->id);
+                        $query->whereBelongsTo(Auth::user());
                     });
                 })                                
                 ->with(['user', 'car' => fn ($query) => $query->withTrashed()])
