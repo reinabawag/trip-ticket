@@ -1,8 +1,6 @@
 <template>
     <div class="card shadow bg-body-tertiary rounded">
-        <div class="ratio ratio-16x9">
-            <img v-bind:src="`${car.image}`" class="card-img-top" alt="">
-        </div>
+        <img v-bind:src="`${car.image}`" class="card-img-top" alt="">
         <div class="card-body">
             <h5 class="card-title">{{ car.plate_number }}</h5>
             <span v-text="`${car.make} ${car.model}`"></span><br>
