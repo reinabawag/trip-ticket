@@ -252,9 +252,11 @@ const triggerClick = () => {
                                 <label for="image" class="form-label">Upload new image</label>
                                 <input type="file" ref="carImageInput" @input="carImage.photo = $event.target.files[0]" class="form-control" id="image">
                             </div>
-                            <progress v-if="carImage.progress" :value="carImage.progress.percentage" max="100">
-                                {{ carImage.progress.percentage }}%
-                            </progress>
+                            <div v-if="carImage.progress" class="progress">
+                                <div class="progress-bar" role="progressbar" aria-label="progressbar" :style="{width: carImage.progress.percentage + '%'}" :aria-valuenow="carImage.progress.percentage" aria-valuemin="0" aria-valuemax="100">
+                                    {{ carImage.progress.percentage }}%
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" ref="modalCloseButton"><i class="bi bi-x-square"></i>&nbsp;Close</button>
