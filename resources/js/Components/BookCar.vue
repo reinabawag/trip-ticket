@@ -6,7 +6,8 @@
         <div class="card-body">
             <h5 class="card-title">{{ car.plate_number }}</h5>
             <span v-text="`${car.make} ${car.model}`"></span><br>
-            <span v-text="`${car.transmission}`"></span>
+            <span v-if="car.transmission">Automatic</span>
+            <span v-else>Manual</span>
             <p class="card-text"></p>
             <a role="button" href="#" v-if="car.status == 'Active'" @click.prevent="buttonClicked" data-bs-toggle="modal" data-bs-target="#modal" class="btn btn-success">
                 <i class="bi bi-calendar2-plus"></i> Book ME!

@@ -22,8 +22,7 @@ class CarController extends Controller
         $this->authorize('manage', \App\Models\User::class);
 
         return Inertia::render('Car', [
-            'cars' => Car::with('user')->get(),
-            // 'cars' => CarResource::collection(Car::with('user')->get()),
+            'cars' => CarResource::collection(Car::with('user')->get()),
             'approvers' => fn () => User::whereHas('roles', function (Builder $query) {
                 $query->whereIn('id', [1, 2]);
             })->pluck('name', 'id')
