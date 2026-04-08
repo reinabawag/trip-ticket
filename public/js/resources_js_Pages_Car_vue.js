@@ -87,6 +87,14 @@ __webpack_require__.r(__webpack_exports__);
     var triggerClick = function triggerClick() {
       modalCloseButton.value.click();
     };
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.onMounted)(function () {
+      var myModalEl = document.getElementById('modal');
+      myModalEl.addEventListener('hidden.bs.modal', function (event) {
+        carImageInput.value.value = null;
+        carImage.reset();
+        carImage.clearErrors();
+      });
+    });
     var __returned__ = {
       props: props,
       search: search,
@@ -102,6 +110,7 @@ __webpack_require__.r(__webpack_exports__);
       triggerClick: triggerClick,
       ref: vue__WEBPACK_IMPORTED_MODULE_0__.ref,
       computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed,
+      onMounted: vue__WEBPACK_IMPORTED_MODULE_0__.onMounted,
       get Head() {
         return _inertiajs_vue3__WEBPACK_IMPORTED_MODULE_1__.Head;
       },
@@ -443,25 +452,26 @@ var _hoisted_76 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "for": "image",
   "class": "form-label"
 }, "Upload new image", -1 /* HOISTED */);
-var _hoisted_77 = {
+var _hoisted_77 = ["textContent"];
+var _hoisted_78 = {
   key: 0,
   "class": "progress"
 };
-var _hoisted_78 = ["aria-valuenow"];
-var _hoisted_79 = {
+var _hoisted_79 = ["aria-valuenow"];
+var _hoisted_80 = {
   "class": "modal-footer"
 };
-var _hoisted_80 = {
+var _hoisted_81 = {
   type: "button",
   "class": "btn btn-secondary",
   "data-bs-dismiss": "modal",
   ref: "modalCloseButton"
 };
-var _hoisted_81 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+var _hoisted_82 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "bi bi-x-square"
 }, null, -1 /* HOISTED */);
-var _hoisted_82 = ["disabled"];
-var _hoisted_83 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+var _hoisted_83 = ["disabled"];
+var _hoisted_84 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "bi bi-calendar-plus"
 }, null, -1 /* HOISTED */);
 
@@ -686,8 +696,6 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           $setup.carImage.post(_ctx.$route('cars.update', $setup.carImage.id), {
             forceFormData: true,
             onSuccess: function onSuccess() {
-              $setup.carImage.reset('id', 'plate_number', 'photo');
-              $setup.carImageInput.value = null;
               $setup.triggerClick();
             }
           });
@@ -702,9 +710,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onInput: _cache[15] || (_cache[15] = function ($event) {
           return $setup.carImage.photo = $event.target.files[0];
         }),
-        "class": "form-control",
+        "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["form-control", {
+          'is-invalid': $setup.carImage.errors.photo
+        }]),
         id: "image"
-      }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */)]), $setup.carImage.progress ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_77, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+      }, null, 34 /* CLASS, HYDRATE_EVENTS */), $setup.carImage.errors.photo ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+        key: 0,
+        id: "plate_number",
+        textContent: (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.carImage.errors.photo),
+        "class": "invalid-feedback"
+      }, null, 8 /* PROPS */, _hoisted_77)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), $setup.carImage.progress ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_78, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
         "class": "progress-bar",
         role: "progressbar",
         "aria-label": "progressbar",
@@ -714,12 +729,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "aria-valuenow": $setup.carImage.progress.percentage,
         "aria-valuemin": "0",
         "aria-valuemax": "100"
-      }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.carImage.progress.percentage) + "% ", 13 /* TEXT, STYLE, PROPS */, _hoisted_78)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_79, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_80, [_hoisted_81, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Close")], 512 /* NEED_PATCH */), !_ctx.$page.props.flash.status ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+      }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.carImage.progress.percentage) + "% ", 13 /* TEXT, STYLE, PROPS */, _hoisted_79)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_80, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_81, [_hoisted_82, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Close")], 512 /* NEED_PATCH */), !_ctx.$page.props.flash.status ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
         key: 0,
         type: "submit",
         disabled: $setup.carImage.processing,
         "class": "btn btn-success"
-      }, [_hoisted_83, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Save")], 8 /* PROPS */, _hoisted_82)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])], 32 /* HYDRATE_EVENTS */)])])])];
+      }, [_hoisted_84, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Save")], 8 /* PROPS */, _hoisted_83)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])], 32 /* HYDRATE_EVENTS */)])])])];
     }),
 
     _: 1 /* STABLE */

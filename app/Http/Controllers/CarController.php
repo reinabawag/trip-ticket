@@ -106,6 +106,10 @@ class CarController extends Controller
     public function update(Request $request, Car $car)
     {        
         if ($request->hasFile('photo')) {
+            $request->validate([
+                'photo' => 'mimes:jpg,png',
+            ]);
+
             Storage::delete("/public/$car->photo");
             $request->photo->store('public');
             $car->photo = $request->file('photo')->hashName();
@@ -121,9 +125,11 @@ class CarController extends Controller
         $car->user_id = $request->user_id;
         $car->transmission = $request->transmission;
 
-        $car->save();
+        if (isset($request->status)) {
+            $car->save();
 
-        return back()->with('message', 'Car status updated!');
+            return back()->with('message', 'Car status updated!');
+        }
     }
 
     /**

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Head, router, useForm } from '@inertiajs/vue3'
 import Layout from '../Shared/Layout.vue'
 
@@ -75,6 +75,16 @@ const modalCloseButton = ref(null);
 const triggerClick = () => {
     modalCloseButton.value.click();
 }
+
+onMounted(() => {
+    const myModalEl = document.getElementById('modal')
+
+    myModalEl.addEventListener('hidden.bs.modal', event => {
+        carImageInput.value.value = null; 
+        carImage.reset();
+        carImage.clearErrors();     
+    })
+})
 
 </script>
 
@@ -236,8 +246,6 @@ const triggerClick = () => {
                     <form @submit.prevent="carImage.post($route('cars.update', carImage.id), {
                         forceFormData: true,
                         onSuccess: () => {
-                            carImage.reset('id', 'plate_number', 'photo');
-                            carImageInput.value = null;
                             triggerClick();
                         }
                     })">
@@ -250,7 +258,8 @@ const triggerClick = () => {
                             <br>
                             <div class="mb-3">
                                 <label for="image" class="form-label">Upload new image</label>
-                                <input type="file" ref="carImageInput" @input="carImage.photo = $event.target.files[0]" class="form-control" id="image">
+                                <input type="file" ref="carImageInput" @input="carImage.photo = $event.target.files[0]" class="form-control" :class="{'is-invalid': carImage.errors.photo}" id="image">
+                                <div id="plate_number" v-if="carImage.errors.photo" v-text="carImage.errors.photo" class="invalid-feedback"></div>
                             </div>
                             <div v-if="carImage.progress" class="progress">
                                 <div class="progress-bar" role="progressbar" aria-label="progressbar" :style="{width: carImage.progress.percentage + '%'}" :aria-valuenow="carImage.progress.percentage" aria-valuemin="0" aria-valuemax="100">
