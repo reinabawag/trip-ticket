@@ -4,8 +4,8 @@ import { Head, router, useForm } from '@inertiajs/vue3'
 import Layout from '../Shared/Layout.vue'
 
 const props = defineProps({
-    cars: Array,
-    approvers: Array,
+    cars: Object,
+    approvers: Object,
 })
 
 const search = ref('')
@@ -59,6 +59,23 @@ const decomCar = id => {
         onBefore: () => confirm('Are you sure you want to decom this car?'),
     })
 }
+
+const carImage = useForm({
+    _method: 'put',
+    id: null,
+    plate_number: null,
+    photo: null,
+    oldPhoto: null
+})
+
+const carImageInput = ref(null);
+
+const modalCloseButton = ref(null);
+
+const triggerClick = () => {
+    modalCloseButton.value.click();
+}
+
 </script>
 
 <template>
@@ -188,7 +205,7 @@ const decomCar = id => {
                             </td>
                             <td>
                                 <div class="d-flex justify-content-center" v-if="!car.id">
-                                    <a class="btn btn-primary btn-sm m-auto" href="#" role="button">
+                                    <a class="btn btn-primary btn-sm m-auto" href="#" role="button" data-bs-toggle="modal" data-bs-target="#modal" @click="carImage.id = carx.id, carImage.plate_number = carx.plate_number, carImage.oldPhoto = carx.image">
                                         <i class="bi bi-eye"></i>
                                     </a>
                                     <a class="btn btn-success btn-sm m-auto" href="#" role="button"
@@ -210,6 +227,41 @@ const decomCar = id => {
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        <div class="modal fade" tabindex="-1" id="modal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <form @submit.prevent="carImage.post($route('cars.update', carImage.id), {
+                        forceFormData: true,
+                        onSuccess: () => {
+                            carImage.reset('id', 'plate_number', 'photo');
+                            carImageInput.value = null;
+                            triggerClick();
+                        }
+                    })">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Image {{ carImage.plate_number }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <img :src="carImage.oldPhoto" alt="car image" class="img-fluid mx-auto d-block">
+                            <br>
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Upload new image</label>
+                                <input type="file" ref="carImageInput" @input="carImage.photo = $event.target.files[0]" class="form-control" id="image">
+                            </div>
+                            <progress v-if="carImage.progress" :value="carImage.progress.percentage" max="100">
+                                {{ carImage.progress.percentage }}%
+                            </progress>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" ref="modalCloseButton"><i class="bi bi-x-square"></i>&nbsp;Close</button>
+                            <button type="submit" v-if="!$page.props.flash.status" :disabled="carImage.processing" class="btn btn-success"><i class="bi bi-calendar-plus"></i>&nbsp;Save</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </Layout>

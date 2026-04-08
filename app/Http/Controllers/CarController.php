@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CarResource;
 use App\Models\Car;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class CarController extends Controller
@@ -20,7 +22,8 @@ class CarController extends Controller
         $this->authorize('manage', \App\Models\User::class);
 
         return Inertia::render('Car', [
-            'cars' => Car::with('user')->get(),
+            // 'cars' => Car::with('user')->get(),
+            'cars' => CarResource::collection(Car::with('user')->get()),
             'approvers' => fn () => User::whereHas('roles', function (Builder $query) {
                 $query->whereIn('id', [1, 2]);
             })->pluck('name', 'id')
@@ -102,7 +105,16 @@ class CarController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Car $car)
-    {
+    {        
+        if ($request->hasFile('photo')) {
+            Storage::delete("/public/$car->photo");
+            $request->photo->store('public');
+            $car->photo = $request->file('photo')->hashName();
+            $car->save();
+
+            return back()->with('message', 'Car image updated!');
+        }
+        
         $car->status = $request->status;
         $car->plate_number = $request->plate_number;
         $car->make = $request->make;
