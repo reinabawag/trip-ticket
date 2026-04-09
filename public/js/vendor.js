@@ -72456,7 +72456,7 @@ function yr(n) {
   return n.toLowerCase().replace(/_-\[\]/g, "");
 }
 var Ar = (() => {
-  var n = "file:///home/rein/trip-ticket/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.js";
+  var n = "file:///var/www/html/node_modules/vue-qrcode-reader/dist/vue-qrcode-reader.js";
   return function(i = {}) {
     var a = i, u, d;
     a.ready = new Promise((e, t) => {

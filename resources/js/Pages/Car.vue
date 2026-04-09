@@ -42,14 +42,14 @@ const changeStatus = (carx, event) => {
 }
 
 const updateStatus = () => {
-    car.patch(route('cars.update', car.id), {
+    car.put(route('cars.update', car.id), {
         onSuccess: () => {
             car.id = null,
-                car.plate_number = null,
-                car.make = null,
-                car.model = null
-                car.transmission = 0,
-                car.user_id = null
+            car.plate_number = null,
+            car.make = null,
+            car.model = null
+            car.transmission = 0,
+            car.user_id = null
         }
     });
 }
@@ -61,7 +61,7 @@ const decomCar = id => {
 }
 
 const carImage = useForm({
-    _method: 'put',
+    _method: 'patch',
     id: null,
     plate_number: null,
     photo: null,
@@ -74,6 +74,15 @@ const modalCloseButton = ref(null);
 
 const triggerClick = () => {
     modalCloseButton.value.click();
+}
+
+const submitImageUpdate = () => {
+    carImage.post(route('cars.update', carImage.id), {
+        forceFormData: true,
+        onSuccess: () => {
+            triggerClick();
+        }
+    })
 }
 
 onMounted(() => {
@@ -243,12 +252,7 @@ onMounted(() => {
         <div class="modal fade" tabindex="-1" id="modal">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <form @submit.prevent="carImage.post($route('cars.update', carImage.id), {
-                        forceFormData: true,
-                        onSuccess: () => {
-                            triggerClick();
-                        }
-                    })">
+                    <form @submit.prevent="submitImageUpdate">
                         <div class="modal-header">
                             <h5 class="modal-title">Image {{ carImage.plate_number }}</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

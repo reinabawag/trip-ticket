@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class CarResource extends JsonResource
 {
@@ -21,7 +22,7 @@ class CarResource extends JsonResource
             'model' => $this->model,
             'transmission' => $this->transmission,
             'user_id' => $this->user_id,
-            'image' => ! is_null($this->photo) ? asset("storage/$this->photo") : 'https://picsum.photos/200/',
+            'image' => ! is_null($this->photo) ? Storage::url($this->photo) : 'https://picsum.photos/200/',
             'status' => $this->status,
             'user' => $this->whenLoaded('user')
         ];

@@ -54,22 +54,14 @@ class CarController extends Controller
             'status' => 'required',
             'user_id' => 'nullable|integer',
             'transmission' => 'required|integer',
-            'photo' => 'mimes:jpg,png',
+            'photo' => 'image|mimes:jpg,png',
         ]);
 
-        $request->photo->store('public');
-
-        if ($request->file('photo')->isValid()) {
-            Car::create([
-                'plate_number' => $request->plate_number,
-                'make' => $request->make,
-                'model' => $request->model,
-                'status' => $request->status,
-                'user_id' => $request->user_id,
-                'transmission' => $request->transmission,
-                'photo' => $request->file('photo')->hashName(),
-            ]);
+        if ($request->hasFile('photo')) {
+            $validatedData['photo'] = $request->file('photo')->store('public');
         }
+        
+        Car::create($validatedData);
 
         return redirect('/cars');
     }
@@ -105,27 +97,21 @@ class CarController extends Controller
      */
     public function update(Request $request, Car $car)
     {        
-        if ($request->hasFile('photo')) {
+        if ($request->hasFile('photo') && $request->isMethod('patch')) {
             $request->validate([
-                'photo' => 'mimes:jpg,png',
+                'photo' => 'image|mimes:jpg,png',
             ]);
 
-            Storage::delete("/public/$car->photo");
-            $request->photo->store('public');
-            $car->photo = $request->file('photo')->hashName();
+            Storage::delete($car->photo);
+            $car->photo = $request->file('photo')->store('public');
+
             $car->save();
 
             return back()->with('message', 'Car image updated!');
         }
-        
-        $car->status = $request->status;
-        $car->plate_number = $request->plate_number;
-        $car->make = $request->make;
-        $car->model = $request->model;
-        $car->user_id = $request->user_id;
-        $car->transmission = $request->transmission;
 
-        if (isset($request->status)) {
+        if ($request->isMethod('put')) {
+            $car->fill($request->all());            
             $car->save();
 
             return back()->with('message', 'Car status updated!');
