@@ -23,7 +23,7 @@ class CarController extends Controller
 
         return Inertia::render('Car', [
             'cars' => CarResource::collection(Car::with('user')->get()),
-            'approvers' => fn () => User::whereHas('roles', function (Builder $query) {
+            'approvers' => fn() => User::whereHas('roles', function (Builder $query) {
                 $query->whereIn('id', [1, 2]);
             })->pluck('name', 'id')
         ]);
@@ -60,7 +60,7 @@ class CarController extends Controller
         if ($request->hasFile('photo')) {
             $validatedData['photo'] = $request->file('photo')->store('public');
         }
-        
+
         Car::create($validatedData);
 
         return redirect('/cars');
@@ -96,7 +96,7 @@ class CarController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Car $car)
-    {        
+    {
         if ($request->hasFile('photo') && $request->isMethod('patch')) {
             $request->validate([
                 'photo' => 'image|mimes:jpg,png',
@@ -111,7 +111,7 @@ class CarController extends Controller
         }
 
         if ($request->isMethod('put')) {
-            $car->fill($request->all());            
+            $car->fill($request->all());
             $car->save();
 
             return back()->with('message', 'Car status updated!');

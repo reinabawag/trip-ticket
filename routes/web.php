@@ -64,7 +64,7 @@ Route::get('/forgot-password', function () {
     return Inertia::render('Reset');
 })->middleware('guest')->name('password.request');
 
-Route::post('/forgot-password', function(Request $request) {
+Route::post('/forgot-password', function (Request $request) {
     $request->validate(['email' => 'required|email']);
 
     $status = Password::sendResetLink(
@@ -72,8 +72,8 @@ Route::post('/forgot-password', function(Request $request) {
     );
 
     return $status === Password::RESET_LINK_SENT
-                ? back()->with(['status' => __($status)])
-                : back()->withErrors(['email' => __($status)]);
+        ? back()->with(['status' => __($status)])
+        : back()->withErrors(['email' => __($status)]);
 })->middleware('guest')->name('password.email');
 
 Route::get('/reset-password/{token}', function ($token) {
@@ -86,23 +86,23 @@ Route::post('/reset-password', function (Request $request) {
         'email' => 'required|email',
         'password' => 'required|min:8|confirmed',
     ]);
- 
+
     $status = Password::reset(
         $request->only('email', 'password', 'password_confirmation', 'token'),
         function ($user, $password) {
             $user->forceFill([
                 'password' => Illuminate\Support\Facades\Hash::make($password)
             ])->setRememberToken(Illuminate\Support\Str::random(60));
- 
+
             $user->save();
- 
+
             event(new Illuminate\Auth\Events\PasswordReset($user));
         }
     );
- 
+
     return $status === Password::PASSWORD_RESET
-                ? redirect()->route('login')->with('status', __($status))
-                : back()->withErrors(['email' => [__($status)]]);
+        ? redirect()->route('login')->with('status', __($status))
+        : back()->withErrors(['email' => [__($status)]]);
 })->middleware('guest')->name('password.update');
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -118,7 +118,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/profile', function (Request $request) {
         return Inertia::render('Profile', [
-            'bookings' => fn () => TripCarCollection::make(Auth::user()->trips()->with(['car' => function ($query) {
+            'bookings' => fn() => TripCarCollection::make(Auth::user()->trips()->with(['car' => function ($query) {
                 $query->withTrashed();
             }, 'user'])->where(function ($query) use ($request) {
                 $query->where('purpose', 'like', '%' . $request->search . '%')
@@ -142,7 +142,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/approvals', function (Request $request) {
         return Inertia::render('Approval', [
-            'approvals' => fn () => TripCarCollection::make(
+            'approvals' => fn() => TripCarCollection::make(
                 \App\Models\Trip::where(function ($query) use ($request) {
                     $query->where('purpose', 'like', '%' . $request->search . '%')
                         ->orWhere('departure', 'like', '%' . $request->search . '%')
@@ -151,28 +151,28 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         ->orWhere('driver', 'like', '%' . $request->search . '%')
                         ->orWhereHas('car', function ($query) use ($request) {
                             $query->withTrashed();
-                            $query->where('plate_number', 'like', '%' . $request->search . '%');                            
+                            $query->where('plate_number', 'like', '%' . $request->search . '%');
                         })
                         ->orWhereHas('user', function ($query) use ($request) {
                             $query->where('name', 'like', '%' . $request->search . '%');
                         });
                 })
-                ->where(function ($query) use ($request) {
-                    $query
-                    ->whereHas('user', function ($query) use ($request) {
-                        $query->when($request->user()->can('approve') && $request->user()->cannot('manage'), function ($query) {
-                            $query->whereBelongsTo(Auth::user(), 'approver');                            
-                        });
+                    ->where(function ($query) use ($request) {
+                        $query
+                            ->whereHas('user', function ($query) use ($request) {
+                                $query->when($request->user()->can('approve') && $request->user()->cannot('manage'), function ($query) {
+                                    $query->whereBelongsTo(Auth::user(), 'approver');
+                                });
+                            })
+                            ->orWhereHas('car', function ($query) use ($request) {
+                                $query->whereBelongsTo(Auth::user());
+                            });
                     })
-                    ->orWhereHas('car', function ($query) use ($request) {                            
-                        $query->whereBelongsTo(Auth::user());
-                    });
-                })                                
-                ->with(['user', 'car' => fn ($query) => $query->withTrashed()])
-                ->latest()
-                ->paginate()
+                    ->with(['user', 'car' => fn($query) => $query->withTrashed()])
+                    ->latest()
+                    ->paginate()
             ),
-            'search' => fn () => $request->search,
+            'search' => fn() => $request->search,
         ]);
     })->can('approve', \App\Models\User::class)->name('trips.approvals');
 

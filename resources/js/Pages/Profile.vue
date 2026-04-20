@@ -32,6 +32,7 @@ watch(search, _.debounce(() => {
 </script>
 
 <template>
+
     <Head title="Profile" />
 
     <Layout>
@@ -73,11 +74,13 @@ watch(search, _.debounce(() => {
                         <span v-if="!booking.is_active && booking.is_approved">Approved</span>
                         <span v-if="!booking.is_active && !booking.is_approved">Canceled</span>
                     </td>
-                    <td class="d-flex w-100">
-                        <button type="button" class="btn btn-sm btn-warning flex-fill" v-if="booking.is_active"
+                    <td>
+                        <div class="d-flex w-100">
+                            <button type="button" class="btn btn-sm btn-warning flex-fill" v-if="booking.is_active"
                             @click="rowClicked(booking.id)"><i class="bi bi-x-circle"></i>&nbsp;Cancel</button>
-                        <button type="button" class="btn btn-sm btn-warning disabled flex-fill" v-else><i
-                                class="bi bi-x-circle"></i>&nbsp;Canceled</button>
+                            <button type="button" class="btn btn-sm btn-warning disabled flex-fill" v-else><i
+                                    class="bi bi-x-circle"></i>&nbsp;Canceled</button>
+                        </div>
                     </td>
                 </tr>
                 <tr v-else>
