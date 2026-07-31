@@ -48,7 +48,7 @@ class CarController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'plate_number' => ['required', 'regex:/[A-Z]{3} ([0-9]{4})|([0-9]{3})/'],
+            'plate_number' => ['required', 'regex:/[A-Z]{3} ([0-9]{4})|([0-9]{3})/', 'unique:cars,plate_number'],
             'make' => 'required',
             'model' => 'required',
             'status' => 'required',
@@ -97,6 +97,15 @@ class CarController extends Controller
      */
     public function update(Request $request, Car $car)
     {
+        $request->validate([
+            'plate_number' => ['required', 'regex:/[A-Z]{3} ([0-9]{4})|([0-9]{3})/', 'unique:cars,plate_number'],
+            'make' => 'required',
+            'model' => 'required',
+            'status' => 'required',
+            'user_id' => 'nullable|integer',
+            'transmission' => 'required|integer',
+        ]);
+
         if ($request->hasFile('photo') && $request->isMethod('patch')) {
             $request->validate([
                 'photo' => 'image|mimes:jpg,png',
